@@ -624,8 +624,8 @@
             const g = guest.value;
             let cand = g['立绘'] || g['portrait'] || g['头像'] || g['avatar'] || g['avatarUrl'] || g['image'];
             const name = guestName.value || '';
-            // GitHub raw 基础路径（存放在仓库的 img 文件夹下）
-            const repoRawBase = 'https://raw.githubusercontent.com/NoteBene/tavern_room/main/img';
+            // 使用 jsDelivr CDN 以提高中国大陆可访问性（指向仓库的 img 目录）
+            const repoRawBase = 'https://cdn.jsdelivr.net/gh/NoteBene/tavern_room@main/img';
 
             // 若为数组，则取第一项；确保为字符串
             if (Array.isArray(cand)) cand = cand[0];
