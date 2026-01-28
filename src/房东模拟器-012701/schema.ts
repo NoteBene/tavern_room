@@ -66,6 +66,9 @@ export const Schema = z.object({
           })
           .prefault({}),
 
+        // 立绘类型：可选值用于在 UI 中选择角色的默认立绘
+        立绘: z.enum(['常服', '内衣', '情趣内衣', '裸体', '精液']).prefault('常服'),
+
         当前心情: z.string().prefault('普通'),
         正在干嘛: z.string().prefault('在房间休息'),
         当前计划: z.string().prefault('无'),

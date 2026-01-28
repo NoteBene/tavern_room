@@ -622,12 +622,42 @@
           const portraitSrc = computed(() => {
             if (!guest.value) return null;
             const g = guest.value;
-            const cand = g['立绘'] || g['portrait'] || g['头像'] || g['avatar'] || g['avatarUrl'] || g['image'];
-            if (!cand) return null;
-            if (/^https?:\/\//.test(cand) || cand.startsWith('/')) return cand;
-            if (cand.includes('/')) return cand;
+            let cand = g['立绘'] || g['portrait'] || g['头像'] || g['avatar'] || g['avatarUrl'] || g['image'];
             const name = guestName.value || '';
-            return `/user/images/${encodeURIComponent(name)}/${encodeURIComponent(cand)}`;
+            // GitHub raw 基础路径（存放在仓库的 img 文件夹下）
+            const repoRawBase = 'https://raw.githubusercontent.com/NoteBene/tavern_room/main/img';
+
+            // 若为数组，则取第一项；确保为字符串
+            if (Array.isArray(cand)) cand = cand[0];
+            if (!cand) {
+              // 默认使用角色文件夹中的一张图片（示例要求默认为 内衣.jpg）
+              return `${repoRawBase}/${encodeURIComponent(name)}/${encodeURIComponent('内衣.jpg')}`;
+            }
+            cand = String(cand).trim();
+
+            // 已经是绝对 URL，直接返回
+            if (/^https?:\/\//.test(cand)) return cand;
+
+            // 如果包含路径分隔符，尝试按仓库 img 路径构造（允许传入 img/角色/文件.jpg 或 角色/文件.jpg）
+            if (cand.includes('/')) {
+              const parts = cand.split('/').filter(Boolean);
+              // 如果以 img 开头，去掉该部分
+              if (parts[0] === 'img') parts.shift();
+              const folder = parts.shift() || name;
+              let file = parts.join('/');
+              if (!file) {
+                // 优先使用房客变量中的 `立绘` 字段（允许：常服、内衣、情趣内衣、裸体、精液）
+                const lp = (g && (g['立绘'] )) || '内衣';
+                file = String(lp || '内衣');
+                if (!/\.[a-zA-Z0-9]+$/.test(file)) file += '.jpg';
+              }
+              return `${repoRawBase}/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
+            }
+
+            // 若 cand 是单个文件名或不含扩展名，则视作文件名放在角色文件夹下
+            let filename = cand;
+            if (!/\.[a-zA-Z0-9]+$/.test(filename)) filename += '.jpg';
+            return `${repoRawBase}/${encodeURIComponent(name)}/${encodeURIComponent(filename)}`;
           });
 
           const basicKeys = ['种族', '等级', '身高', '三围', '罩杯', '年龄'];
