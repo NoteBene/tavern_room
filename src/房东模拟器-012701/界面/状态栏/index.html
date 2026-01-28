@@ -647,7 +647,7 @@
               let file = parts.join('/');
               if (!file) {
                 // 优先使用房客变量中的 `立绘` 字段（允许：常服、内衣、情趣内衣、裸体、精液）
-                const lp = (g && (g['立绘'] )) || '内衣';
+                const lp = (g && g['立绘']) || '内衣';
                 file = String(lp || '内衣');
                 if (!/\.[a-zA-Z0-9]+$/.test(file)) file += '.jpg';
               }
