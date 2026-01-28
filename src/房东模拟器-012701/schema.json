@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "当前时间": {
+      "default": "2026年1月1日 周一 08:00",
+      "type": "string"
+    },
+    "近期事务": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "主角资金": {
+      "default": 1000,
+      "type": "number"
+    },
+    "公寓知名度": {
+      "default": 10,
+      "type": "number"
+    },
+    "酒吧知名度": {
+      "default": 10,
+      "type": "number"
+    },
+    "可监控区域": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "监控区域名称"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "description": "监控画面描述"
+      }
+    },
+    "物品栏": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "物品名"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "描述": {
+            "type": "string"
+          },
+          "数量": {
+            "default": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "描述"
+        ]
+      }
+    },
+    "房客": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "房客姓名"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "基本信息": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "种族": {
+                "default": "人类-程序员",
+                "type": "string"
+              },
+              "等级": {
+                "default": "超赞",
+                "type": "string"
+              },
+              "身高": {
+                "default": 160,
+                "type": "number"
+              },
+              "三围": {
+                "default": "88-58-86",
+                "type": "string"
+              },
+              "罩杯": {
+                "default": "C",
+                "type": "string"
+              },
+              "年龄": {
+                "default": 20,
+                "type": "number"
+              }
+            }
+          },
+          "好感度": {
+            "type": "number"
+          },
+          "堕落度": {
+            "type": "number"
+          },
+          "着装": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "上装": {
+                "type": "string"
+              },
+              "下装": {
+                "type": "string"
+              },
+              "内衣": {
+                "type": "string"
+              },
+              "袜子": {
+                "type": "string"
+              },
+              "鞋子": {
+                "type": "string"
+              },
+              "饰品": {
+                "type": "string"
+              }
+            }
+          },
+          "当前心情": {
+            "default": "普通",
+            "type": "string"
+          },
+          "正在干嘛": {
+            "default": "在房间休息",
+            "type": "string"
+          },
+          "当前计划": {
+            "default": "无",
+            "type": "string"
+          },
+          "当前解锁阶段": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "解锁路线": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -48,4 +48,5 @@ export const Schema = z.object({
       .transform(data => _.pickBy(data, ({ 数量 }) => 数量 > 0)),
   }),
 });
+
 export type Schema = z.output<typeof Schema>;
