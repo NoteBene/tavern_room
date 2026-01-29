@@ -1,3 +1,761 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>房东 - 仪表面板</title><script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script><style>:root{--primary-yellow:#ffd700;--primary-brown:#8b4513;--light-yellow:#fff8dc;--cream-bg:#faf3e0;--cream-dark:#f5e6ca;--cream-darker:#e8d9b5;--text-dark:#5d4037;--accent-gold:#d4af37;--border-light:#d7ccc8}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',sans-serif;background:var(--cream-bg);color:var(--text-dark);margin:0;padding:6px;min-height:100vh}.card{max-width:980px;margin:0 auto;background:#fff;border-radius:12px;padding:12px 8px;box-shadow:0 2px 12px rgba(0,0,0,.08);border:1px solid var(--border-light)}.top{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border-light);margin-bottom:8px}.time{color:#795548;font-size:12px;font-weight:500}.top-stats{display:flex;gap:6px}.stat{background:var(--cream-dark);border:1px solid var(--border-light);padding:4px 10px;border-radius:6px;font-size:10px;color:var(--text-dark);min-width:80px;text-align:center}.stat strong{color:var(--primary-brown);font-size:11px}.tabs{display:flex;gap:8px;margin:8px 0;padding-bottom:2px;border-bottom:1px solid var(--border-light)}.tabs button{padding:6px 12px;border-radius:6px;border:2px solid transparent;background:var(--cream-dark);color:var(--text-dark);cursor:pointer;font-size:12px;font-weight:500;display:flex;align-items:center;gap:4px;transition:all .2s}.tabs button:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(0,0,0,.1)}.tabs button.active{color:#fff;border-color:var(--accent-gold);box-shadow:0 2px 4px rgba(212,175,55,.2)}.tabs button:first-child.active{background:var(--primary-yellow);color:#5d4037}.tabs button:nth-child(2).active{background:#8b4513}.tabs button:nth-child(3).active{background:#2e7d32}.tabs button:nth-child(4).active{background:#1565c0}.room-tabs{display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap}.room-tabs button{padding:4px 4px;border-radius:4px;border:1px solid var(--border-light);background:var(--light-yellow);color:var(--text-dark);cursor:pointer;font-size:10px;transition:all .2s;min-width:30px;text-align:center}.room-tabs button:hover{background:#ffecb3}.room-tabs button.active{background:var(--primary-yellow);border-color:var(--accent-gold);font-weight:600;box-shadow:0 1px 3px rgba(255,215,0,.3)}.guest-panel{display:flex;flex-direction:column;gap:8px}.guest-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}.guest-name{font-size:16px;font-weight:700;color:#5d4037;border-bottom:2px solid var(--cream-dark);padding-bottom:4px}.char-portrait{width:64px;height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:6px;border:1px solid var(--border-light);background:#fff}.char-portrait img{width:100%;height:100%;object-fit:cover;display:block}.progress-row{display:flex;gap:8px}.progress-item{flex:1;min-width:100px;background:var(--cream-dark);padding:8px;border-radius:6px;border:1px solid var(--border-light);display:flex;align-items:center;gap:8px}.progress-label{font-size:11px;color:#795548;font-weight:500;width:64px;flex:0 0 64px}.progress-value{font-size:14px;font-weight:700;color:var(--primary-brown);width:48px;text-align:right;flex:0 0 48px}.bar{height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;flex:1 1 auto}.bar>i{display:block;height:100%;background:linear-gradient(to right,#4caf50,#8bc34a);transition:width .5s ease}.bar.warn>i{background:linear-gradient(to right,#f44336,#ff9800)}.cards{display:flex;gap:8px;flex-wrap:wrap}.card-block{flex:1;min-width:180px;background:var(--cream-dark);padding:0 4px;border-radius:8px;border:1px solid var(--border-light)}.card-block h4{margin:2px 0 6px 0;padding:0;color:var(--text-dark);font-size:13px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}.collapsible-header{display:flex;align-items:center;gap:6px}.collapse-icon{transition:transform .3s;font-size:6px;color:#795548;margin-right:2px}.collapsed .collapse-icon{transform:rotate(-90deg)}.card-content{overflow:hidden;transition:max-height .3s ease}.collapsed+.card-content{max-height:0}.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}.card-item{background:#fff;padding:6px;border-radius:4px;border:1px solid var(--border-light);font-size:10px}.card-item strong{color:var(--primary-brown);display:block;font-size:9px;margin-bottom:2px}.list-cards{display:flex;flex-wrap:wrap;gap:8px}.list-cards .card-block{width:180px}.empty-room,.empty-state{text-align:center;padding:40px 20px;color:#795548;font-size:12px;background:var(--cream-dark);border-radius:8px;border:1px dashed var(--border-light);margin:10px 0}.empty-room::before,.empty-state::before{display:block;font-size:32px;margin-bottom:12px;opacity:.6}.empty-room::before{content:'🏠'}.tab-icon{font-size:12px}.empty-state[data-type=props]::before{content:'🎒'}.empty-state[data-type=monitor]::before{content:'📹'}.empty-state[data-type=tasks]::before{content:'📋'}.guest-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px;font-size:11px}.guest-info>div{background:var(--cream-dark);padding:6px 10px;border-radius:4px;border:1px solid var(--border-light)}.guest-info strong{color:var(--primary-brown)}@media (max-width:640px){.card{padding:8px 6px}.card-grid{grid-template-columns:repeat(2,1fr)}.cards{flex-direction:column}.card-block{min-width:100%}.list-cards .card-block{width:100%}.top{flex-direction:column;align-items:flex-start;gap:6px}.top-stats{width:100%;justify-content:space-between;flex-wrap:wrap}.stat{flex:1;min-width:100px}.tabs{flex-wrap:wrap}.tabs button{flex:1;justify-content:center}.progress-row{flex-direction:column}}</style><script type="module">import{waitUntil as t}from'https://testingcf.jsdelivr.net/npm/async-wait-until/+esm';import{createPinia as e}from'https://testingcf.jsdelivr.net/npm/pinia/+esm';var a={946(t,e){e.A=(t,e)=>{const a=t.__vccOpts||t;for(const[t,n]of e)a[t]=n;return a}}},n={};const r=Vue;var s=function t(e){var r=n[e];if(void 0!==r)return r.exports;var s=n[e]={exports:{}};return a[e](s,s.exports,t),s.exports}(946);const i={},o=(0,s.A)(i,[['render',function(t,e){return(0,r.openBlock)(),(0,r.createElementBlock)('div')}]]);$(async()=>{await waitGlobalInitialized('Mvu'),await t(()=>_.has(getVariables({type:'message'}),'stat_data')),(0,r.createApp)(o).use(e()).mount('#app')});
-//# sourceMappingURL=index.js.map</script><style>
-</style></head><body><div id="app" class="card"><div class="top"><div><div class="time">{{ stat['当前时间'] || '—' }}</div></div><div class="top-stats"><div class="stat">资金: <strong>{{ stat['主角资金'] ?? '—' }}</strong></div><div class="stat">公寓知名度: <strong>{{ stat['公寓知名度'] ?? '—' }}</strong></div><div class="stat">酒吧知名度: <strong>{{ stat['酒吧知名度'] ?? '—' }}</strong></div></div></div><div class="tabs" role="tablist"><button :class="{active:tab==='房客'}" @click="tab='房客'"><span class="tab-icon">👥</span></button> <button :class="{active:tab==='道具'}" @click="tab='道具'"><span class="tab-icon">🎮</span></button> <button :class="{active:tab==='监控'}" @click="tab='监控'"><span class="tab-icon">📱</span></button> <button :class="{active:tab==='事务'}" @click="tab='事务'"><span class="tab-icon">📅</span></button></div><div v-if="tab==='房客'"><div class="room-tabs"><button v-for="r in rooms" :key="r" :class="{active:activeRoom===r}" @click="setRoom(r)">{{ r }}</button></div><div id="room-content"><div v-if="guest" class="guest-panel"><div class="guest-header"><div class="char-portrait"><img v-if="portraitSrc" :src="portraitSrc" :alt="guestName"/></div><div class="guest-name">{{ guestName }}</div></div><div class="progress-row"><div class="progress-item"><div class="progress-label">好感度</div><div class="bar"><i :style="{width: (guest.好感度||0) + '%'}"></i></div><div class="progress-value">{{ guest.好感度 ?? 0 }}</div></div><div class="progress-item"><div class="progress-label">堕落度</div><div class="bar warn"><i :style="{width: (guest.堕落度||0) + '%'}"></i></div><div class="progress-value">{{ guest.堕落度 ?? 0 }}</div></div></div><div class="cards"><div class="card-block"><h4 :class="{collapsed: isBasicCollapsed}" @click="toggleCollapse('basic')"><span class="collapsible-header"><span class="collapse-icon">▼</span> 基本信息</span></h4><div class="card-content" :style="{maxHeight: isBasicCollapsed ? '0px' : '500px'}"><div class="card-grid"><div class="card-item" v-for="k in basicKeys" :key="k"><strong>{{ k }}</strong><div>{{ (guest['基本信息'] && guest['基本信息'][k]) ?? '—' }}</div></div></div></div></div><div class="card-block"><h4 :class="{collapsed: isOutfitCollapsed}" @click="toggleCollapse('outfit')"><span class="collapsible-header"><span class="collapse-icon">▼</span> 着装</span></h4><div class="card-content" :style="{maxHeight: isOutfitCollapsed ? '0px' : '500px'}"><div class="card-grid"><div class="card-item" v-for="k in outfitKeys" :key="k"><strong>{{ k }}</strong><div>{{ (guest['着装'] && guest['着装'][k]) ?? '—' }}</div></div></div></div></div></div><div class="guest-info"><div>当前心情: <strong>{{ guest['当前心情'] ?? '—' }}</strong></div><div>正在干嘛: <strong>{{ guest['正在干嘛'] ?? '—' }}</strong></div><div>当前计划: <strong>{{ guest['当前计划'] ?? '—' }}</strong></div></div></div><div v-else class="empty-room">房间暂无房客</div></div></div><div v-if="tab==='道具'"><div v-if="Object.keys(items).length === 0" class="empty-state" data-type="props">背包空空如也</div><div v-else class="list-cards"><div class="card-block" v-for="(it,k) in items" :key="k"><h4>{{ k }}</h4><div>{{ it['描述'] ?? it['description'] ?? '—' }}</div><div>数量: {{ it['数量'] ?? it['count'] ?? '—' }}</div></div></div></div><div v-if="tab==='监控'"><div v-if="Object.keys(monitors).length === 0" class="empty-state" data-type="monitor">暂无监控设备</div><div v-else class="list-cards"><div class="card-block" v-for="(v,k) in monitors" :key="k"><h4>{{ k }}</h4><div>{{ v }}</div></div></div></div><div v-if="tab==='事务'"><div v-if="tasks.length === 0" class="empty-state" data-type="tasks">暂无待处理事务</div><div v-else class="list-cards"><div class="card-block" v-for="(t,idx) in tasks" :key="idx"><div>{{ t }}</div></div></div></div></div><script type="module">const{createApp:createApp,ref:ref,computed:computed,onMounted:onMounted}=Vue;function _getGlobal(e){return window[e]}function getAllVariables(){return"function"==typeof _getGlobal("getAllVariables")?_getGlobal("getAllVariables")():window.__mock_variables||{}}async function waitInit(){const e=_getGlobal("waitGlobalInitialized");"function"==typeof e&&await e("Mvu")}createApp({setup(){const e=ref("房客"),t=["201","202","203","204","205"],o=ref(t[0]),a=ref(getAllVariables()),n=computed(()=>a.value.stat_data||{}),l=ref(!0),u=ref(!0);const i=computed(()=>Object.keys(n.value["房客"]||{})),r=computed(()=>t.indexOf(o.value)),s=computed(()=>i.value[r.value]||null),c=computed(()=>s.value?n.value["房客"][s.value]:null),p=computed(()=>{if(!c.value)return null;const e=c.value;let t=e["立绘"]||e.portrait||e["头像"]||e.avatar||e.avatarUrl||e.image;const o=s.value||"",a="https://raw.githubusercontent.com/NoteBene/tavern_room/main/img";if(Array.isArray(t)&&(t=t[0]),!t)return`${a}/${encodeURIComponent(o)}/${encodeURIComponent("内衣.jpg")}`;if(t=String(t).trim(),/^https?:\/\//.test(t))return t;if(t.includes("/")){const n=t.split("/").filter(Boolean);"img"===n[0]&&n.shift();const l=n.shift()||o;let u=n.join("/");if(!u){const t=e&&e["立绘"]||"内衣";u=String(t||"内衣"),/\.[a-zA-Z0-9]+$/.test(u)||(u+=".jpg")}return`${a}/${encodeURIComponent(l)}/${encodeURIComponent(u)}`}let n=t;return/\.[a-zA-Z0-9]+$/.test(n)||(n+=".jpg"),`${a}/${encodeURIComponent(o)}/${encodeURIComponent(n)}`}),m=computed(()=>n.value["物品栏"]||{}),f=computed(()=>n.value["可监控区域"]||{}),d=computed(()=>n.value["近期事务"]||[]);return onMounted(async()=>{function e(){a.value=getAllVariables()}await waitInit(),e(),setInterval(e,2e3)}),{tab:e,rooms:t,activeRoom:o,setRoom:function(e){o.value=e},stat:n,guest:c,guestName:s,portraitSrc:p,basicKeys:["种族","等级","身高","三围","罩杯","年龄"],outfitKeys:["上装","下装","内衣","袜子","鞋子","饰品"],items:m,monitors:f,tasks:d,isBasicCollapsed:l,isOutfitCollapsed:u,toggleCollapse:function(e){"basic"===e?l.value=!l.value:"outfit"===e&&(u.value=!u.value)}}}}).mount("#app")</script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>房东 - 仪表面板</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+      :root {
+        --primary-yellow: #ffd700; /* 主黄色，用于房客标签 */
+        --primary-brown: #8b4513; /* 主棕色，用于道具等标签 */
+        --light-yellow: #fff8dc; /* 浅黄色，用于房间按钮 */
+        --cream-bg: #faf3e0; /* 米黄色背景 */
+        --cream-dark: #f5e6ca; /* 稍深的米黄 */
+        --cream-darker: #e8d9b5; /* 更深的米黄 */
+        --text-dark: #5d4037; /* 深色文字 */
+        --accent-gold: #d4af37; /* 金色强调色 */
+        --border-light: #d7ccc8; /* 浅色边框 */
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        background: var(--cream-bg);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 6px;
+        min-height: 100vh;
+      }
+
+      .card {
+        max-width: 980px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 12px 8px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-light);
+      }
+
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--border-light);
+        margin-bottom: 8px;
+      }
+
+      .time {
+        color: #795548;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .top-stats {
+        display: flex;
+        gap: 6px;
+      }
+
+      .stat {
+        background: var(--cream-dark);
+        border: 1px solid var(--border-light);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 10px;
+        color: var(--text-dark);
+        min-width: 80px;
+        text-align: center;
+      }
+
+      .stat strong {
+        color: var(--primary-brown);
+        font-size: 11px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin: 8px 0;
+        padding-bottom: 2px;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .tabs button {
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 2px solid transparent;
+        background: var(--cream-dark);
+        color: var(--text-dark);
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s;
+      }
+
+      .tabs button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .tabs button.active {
+        color: white;
+        border-color: var(--accent-gold);
+        box-shadow: 0 2px 4px rgba(212, 175, 55, 0.2);
+      }
+
+      .tabs button:nth-child(1).active {
+        /* 房客 */
+        background: var(--primary-yellow);
+        color: #5d4037;
+      }
+
+      .tabs button:nth-child(2).active {
+        /* 道具 */
+        background: #8b4513;
+      }
+
+      .tabs button:nth-child(3).active {
+        /* 监控 */
+        background: #2e7d32;
+      }
+
+      .tabs button:nth-child(4).active {
+        /* 事务 */
+        background: #1565c0;
+      }
+
+      .room-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 4px;
+        flex-wrap: wrap;
+      }
+
+      .room-tabs button {
+        padding: 4px 4px;
+        border-radius: 4px;
+        border: 1px solid var(--border-light);
+        background: var(--light-yellow);
+        color: var(--text-dark);
+        cursor: pointer;
+        font-size: 10px;
+        transition: all 0.2s;
+        min-width: 30px;
+        text-align: center;
+      }
+
+      .room-tabs button:hover {
+        background: #ffecb3;
+      }
+
+      .room-tabs button.active {
+        background: var(--primary-yellow);
+        border-color: var(--accent-gold);
+        font-weight: 600;
+        box-shadow: 0 1px 3px rgba(255, 215, 0, 0.3);
+      }
+
+      .guest-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .guest-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .char-portrait {
+        width: 90px; /* 放大至9:16比例 */
+        height: 128px; /* 9:16比例 */
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 6px;
+        border: 1px solid var(--border-light);
+        background: white;
+      }
+
+      .char-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .guest-info-vertical {
+        gap: 10px; /* 增大上下间距 */
+      }
+
+      .guest-meta {
+        font-size: 10px;
+        color: #795548;
+        display: flex;
+        gap: 8px;
+      }
+
+      .progress-item {
+        font-size: 14px; /* 减小整体字号 */
+        line-height: 1.2;
+      }
+
+      .progress-item strong {
+        font-size: 14px; /* 数值略大保持可读性 */
+        font-weight: 600;
+      }
+
+      .bar-container {
+        height: 8px; /* 适当缩小进度条高度 */
+      }
+
+      .bar {
+        height: 100%;
+        background: linear-gradient(to right, #4caf50, #8bc34a);
+        transition: width 0.5s ease;
+      }
+
+      .bar.warn {
+        background: linear-gradient(to right, #f44336, #ff9800);
+      }
+
+      .cards {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .card-block {
+        flex: 1;
+        min-width: 180px;
+        background: var(--cream-dark);
+        padding: 0 4px;
+        border-radius: 8px;
+        border: 1px solid var(--border-light);
+      }
+
+      .card-block h4 {
+        margin: 2px 0 6px 0;
+        padding: 0;
+        color: var(--text-dark);
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .collapsible-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .collapse-icon {
+        transition: transform 0.3s;
+        font-size: 6px;
+        color: #795548;
+        margin-right: 2px;
+      }
+
+      .collapsed .collapse-icon {
+        transform: rotate(-90deg);
+      }
+
+      .card-content {
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .collapsed + .card-content {
+        max-height: 0;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-top: 6px;
+      }
+
+      .card-item {
+        background: white;
+        padding: 6px;
+        border-radius: 4px;
+        border: 1px solid var(--border-light);
+        font-size: 10px;
+      }
+
+      .card-item strong {
+        color: var(--primary-brown);
+        display: block;
+        font-size: 9px;
+        margin-bottom: 2px;
+      }
+
+      .list-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .list-cards .card-block {
+        width: 180px;
+      }
+
+      .empty-room,
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #795548;
+        font-size: 12px;
+        background: var(--cream-dark);
+        border-radius: 8px;
+        border: 1px dashed var(--border-light);
+        margin: 10px 0;
+      }
+
+      .empty-room::before,
+      .empty-state::before {
+        display: block;
+        font-size: 32px;
+        margin-bottom: 12px;
+        opacity: 0.6;
+      }
+
+      .empty-room::before {
+        content: '🏠'; /* 房间图标 */
+      }
+
+      .tab-icon {
+        font-size: 12px;
+      }
+
+      .empty-state[data-type='props']::before {
+        content: '🎒'; /* 背包图标 */
+      }
+
+      .empty-state[data-type='monitor']::before {
+        content: '📹'; /* 摄像机图标 */
+      }
+
+      .empty-state[data-type='tasks']::before {
+        content: '📋'; /* 记事本图标 */
+      }
+
+      .guest-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 11px;
+      }
+
+      .guest-info > div {
+        background: var(--cream-dark);
+        padding: 6px 10px;
+        border-radius: 4px;
+        border: 1px solid var(--border-light);
+      }
+
+      .guest-info strong {
+        color: var(--primary-brown);
+      }
+
+      @media (max-width: 640px) {
+        .card {
+          padding: 8px 6px;
+        }
+        .card-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .cards {
+          flex-direction: column;
+        }
+        .card-block {
+          min-width: 100%;
+        }
+        .list-cards .card-block {
+          width: 100%;
+        }
+        .top {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+        .top-stats {
+          width: 100%;
+          justify-content: space-between;
+          flex-wrap: wrap;
+        }
+        .stat {
+          flex: 1;
+          min-width: 40px;
+        }
+        .tabs {
+          flex-wrap: wrap;
+        }
+        .tabs button {
+          flex: 1;
+          justify-content: center;
+        }
+        .progress-row {
+          flex-direction: column;
+        }
+      }
+    </style>
+  <script type="module">import * as __WEBPACK_EXTERNAL_MODULE_https_testingcf_jsdelivr_net_npm_async_wait_until_esm_ee35c30e__ from "https://testingcf.jsdelivr.net/npm/async-wait-until/+esm";
+
+import * as __WEBPACK_EXTERNAL_MODULE_https_testingcf_jsdelivr_net_npm_pinia_esm_b723a504__ from "https://testingcf.jsdelivr.net/npm/pinia/+esm";
+
+var __webpack_modules__ = {
+  "./node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-vue-components!./node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-auto-import!./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/index.js??ruleSet[1].rules[6].use[0]!./src/房东模拟器-012701/界面/状态栏/App.vue?vue&type=template&id=9d81fb88"(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+    eval('{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   render: () => (/* binding */ render)\n/* harmony export */ });\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);\n/* unplugin-vue-components disabled */\n\nfunction render(_ctx, _cache) {\n  return ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div"))\n}//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9ub2RlX21vZHVsZXMvLnBucG0vdW5wbHVnaW5AMi4zLjExL25vZGVfbW9kdWxlcy91bnBsdWdpbi9kaXN0L3dlYnBhY2svbG9hZGVycy90cmFuc2Zvcm0uanM/P3VucGx1Z2luLXZ1ZS1jb21wb25lbnRzIS4vbm9kZV9tb2R1bGVzLy5wbnBtL3VucGx1Z2luQDIuMy4xMS9ub2RlX21vZHVsZXMvdW5wbHVnaW4vZGlzdC93ZWJwYWNrL2xvYWRlcnMvdHJhbnNmb3JtLmpzPz91bnBsdWdpbi1hdXRvLWltcG9ydCEuL25vZGVfbW9kdWxlcy8ucG5wbS92dWUtbG9hZGVyQDE3LjQuMl92dWVAMy41LjJfOTUwYjk1NDAzM2Y3ZWYzMWI2YzQwNTU0YTFmNWE0ODIvbm9kZV9tb2R1bGVzL3Z1ZS1sb2FkZXIvZGlzdC90ZW1wbGF0ZUxvYWRlci5qcz8/cnVsZVNldFsxXS5ydWxlc1s0XSEuL25vZGVfbW9kdWxlcy8ucG5wbS92dWUtbG9hZGVyQDE3LjQuMl92dWVAMy41LjJfOTUwYjk1NDAzM2Y3ZWYzMWI2YzQwNTU0YTFmNWE0ODIvbm9kZV9tb2R1bGVzL3Z1ZS1sb2FkZXIvZGlzdC9pbmRleC5qcz8/cnVsZVNldFsxXS5ydWxlc1s2XS51c2VbMF0hLi9zcmMv5oi/5Lic5qih5ouf5ZmoLTAxMjcwMS/nlYzpnaIv54q25oCB5qCPL0FwcC52dWU/dnVlJnR5cGU9dGVtcGxhdGUmaWQ9OWQ4MWZiODgiLCJtYXBwaW5ncyI6Ijs7Ozs7O3NDQUF3Rjs7QUFFakYsUUFBUSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsQ0FBQyxNQUFNLENBQUMsQ0FBQztBQUNyQyxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsOENBQVUsQ0FBQyxDQUFDLENBQUMsQ0FBQyx1REFBbUIsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ2xEIiwic291cmNlcyI6WyJzcmM6Ly90YXZlcm5faGVscGVyX3RlbXBsYXRlL3NyYy/miL/kuJzmqKHmi5/lmagtMDEyNzAxL+eVjOmdoi/nirbmgIHmoI8vQXBwLnZ1ZSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBvcGVuQmxvY2sgYXMgX29wZW5CbG9jaywgY3JlYXRlRWxlbWVudEJsb2NrIGFzIF9jcmVhdGVFbGVtZW50QmxvY2sgfSBmcm9tIFwidnVlXCJcblxuZXhwb3J0IGZ1bmN0aW9uIHJlbmRlcihfY3R4LCBfY2FjaGUpIHtcbiAgcmV0dXJuIChfb3BlbkJsb2NrKCksIF9jcmVhdGVFbGVtZW50QmxvY2soXCJkaXZcIikpXG59Il0sIm5hbWVzIjpbXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-vue-components!./node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-auto-import!./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/index.js??ruleSet[1].rules[6].use[0]!./src/房东模拟器-012701/界面/状态栏/App.vue?vue&type=template&id=9d81fb88\n\n}');
+  },
+  "./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/exportHelper.js"(__unused_webpack_module, exports) {
+    eval('{\nObject.defineProperty(exports, "__esModule", ({ value: true }));\n// runtime helper for setting properties on components\n// in a tree-shakable way\nexports["default"] = (sfc, props) => {\n    const target = sfc.__vccOpts || sfc;\n    for (const [key, val] of props) {\n        target[key] = val;\n    }\n    return target;\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9ub2RlX21vZHVsZXMvLnBucG0vdnVlLWxvYWRlckAxNy40LjJfdnVlQDMuNS4yXzk1MGI5NTQwMzNmN2VmMzFiNmM0MDU1NGExZjVhNDgyL25vZGVfbW9kdWxlcy92dWUtbG9hZGVyL2Rpc3QvZXhwb3J0SGVscGVyLmpzIiwibWFwcGluZ3MiOiJBQUFhO0FBQ2IsOENBQTZDLEVBQUUsYUFBYSxFQUFDO0FBQzdEO0FBQ0E7QUFDQSxrQkFBZTtBQUNmO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZXMiOlsic3JjOi8vdGF2ZXJuX2hlbHBlcl90ZW1wbGF0ZS9ub2RlX21vZHVsZXMvLnBucG0vdnVlLWxvYWRlckAxNy40LjJfdnVlQDMuNS4yXzk1MGI5NTQwMzNmN2VmMzFiNmM0MDU1NGExZjVhNDgyL25vZGVfbW9kdWxlcy92dWUtbG9hZGVyL2Rpc3QvZXhwb3J0SGVscGVyLmpzIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHN0cmljdFwiO1xuT2JqZWN0LmRlZmluZVByb3BlcnR5KGV4cG9ydHMsIFwiX19lc01vZHVsZVwiLCB7IHZhbHVlOiB0cnVlIH0pO1xuLy8gcnVudGltZSBoZWxwZXIgZm9yIHNldHRpbmcgcHJvcGVydGllcyBvbiBjb21wb25lbnRzXG4vLyBpbiBhIHRyZWUtc2hha2FibGUgd2F5XG5leHBvcnRzLmRlZmF1bHQgPSAoc2ZjLCBwcm9wcykgPT4ge1xuICAgIGNvbnN0IHRhcmdldCA9IHNmYy5fX3ZjY09wdHMgfHwgc2ZjO1xuICAgIGZvciAoY29uc3QgW2tleSwgdmFsXSBvZiBwcm9wcykge1xuICAgICAgICB0YXJnZXRba2V5XSA9IHZhbDtcbiAgICB9XG4gICAgcmV0dXJuIHRhcmdldDtcbn07XG4iXSwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/exportHelper.js\n\n}');
+  },
+  "./src/房东模拟器-012701/界面/状态栏/App.vue"(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+    eval('{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _App_vue_vue_type_template_id_9d81fb88__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue?vue&type=template&id=9d81fb88 */ "./src/房东模拟器-012701/界面/状态栏/App.vue?vue&type=template&id=9d81fb88");\n/* harmony import */ var _node_modules_pnpm_vue_loader_17_4_2_vue_3_5_2_950b954033f7ef31b6c40554a1f5a482_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/exportHelper.js");\n/* unplugin-vue-components disabled */\nconst script = {}\n\n;\nconst __exports__ = /*#__PURE__*/(0,_node_modules_pnpm_vue_loader_17_4_2_vue_3_5_2_950b954033f7ef31b6c40554a1f5a482_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [[\'render\',_App_vue_vue_type_template_id_9d81fb88__WEBPACK_IMPORTED_MODULE_0__.render],[\'__file\',"src/房东模拟器-012701/界面/状态栏/App.vue"]])\n/* hot reload */\nif (false) // removed by dead control flow\n{}\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMv5oi/5Lic5qih5ouf5ZmoLTAxMjcwMS/nlYzpnaIv54q25oCB5qCPL0FwcC52dWUiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUEsc0NBQXNHO0FBQ3RHOztBQUVBLENBQXNLO0FBQ3RLLGlDQUFpQyx3S0FBZSxvQkFBb0IsMEVBQU07QUFDMUU7QUFDQSxJQUFJLEtBQVUsRUFBRTtBQUFBLEVBWWY7OztBQUdELGlFQUFlLFciLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly90YXZlcm5faGVscGVyX3RlbXBsYXRlL3NyYy/miL/kuJzmqKHmi5/lmagtMDEyNzAxL+eVjOmdoi/nirbmgIHmoI8vQXBwLnZ1ZT80MWFjIl0sInNvdXJjZXNDb250ZW50IjpbIi8qIHVucGx1Z2luLXZ1ZS1jb21wb25lbnRzIGRpc2FibGVkICovaW1wb3J0IHsgcmVuZGVyIH0gZnJvbSBcIi4vQXBwLnZ1ZT92dWUmdHlwZT10ZW1wbGF0ZSZpZD05ZDgxZmI4OFwiXG5jb25zdCBzY3JpcHQgPSB7fVxuXG5pbXBvcnQgZXhwb3J0Q29tcG9uZW50IGZyb20gXCIuLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvLnBucG0vdnVlLWxvYWRlckAxNy40LjJfdnVlQDMuNS4yXzk1MGI5NTQwMzNmN2VmMzFiNmM0MDU1NGExZjVhNDgyL25vZGVfbW9kdWxlcy92dWUtbG9hZGVyL2Rpc3QvZXhwb3J0SGVscGVyLmpzXCJcbmNvbnN0IF9fZXhwb3J0c19fID0gLyojX19QVVJFX18qL2V4cG9ydENvbXBvbmVudChzY3JpcHQsIFtbJ3JlbmRlcicscmVuZGVyXSxbJ19fZmlsZScsXCJzcmMv5oi/5Lic5qih5ouf5ZmoLTAxMjcwMS/nlYzpnaIv54q25oCB5qCPL0FwcC52dWVcIl1dKVxuLyogaG90IHJlbG9hZCAqL1xuaWYgKG1vZHVsZS5ob3QpIHtcbiAgX19leHBvcnRzX18uX19obXJJZCA9IFwiOWQ4MWZiODhcIlxuICBjb25zdCBhcGkgPSBfX1ZVRV9ITVJfUlVOVElNRV9fXG4gIG1vZHVsZS5ob3QuYWNjZXB0KClcbiAgaWYgKCFhcGkuY3JlYXRlUmVjb3JkKCc5ZDgxZmI4OCcsIF9fZXhwb3J0c19fKSkge1xuICAgIGFwaS5yZWxvYWQoJzlkODFmYjg4JywgX19leHBvcnRzX18pXG4gIH1cbiAgXG4gIG1vZHVsZS5ob3QuYWNjZXB0KFwiLi9BcHAudnVlP3Z1ZSZ0eXBlPXRlbXBsYXRlJmlkPTlkODFmYjg4XCIsICgpID0+IHtcbiAgICBhcGkucmVyZW5kZXIoJzlkODFmYjg4JywgcmVuZGVyKVxuICB9KVxuXG59XG5cblxuZXhwb3J0IGRlZmF1bHQgX19leHBvcnRzX18iXSwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/房东模拟器-012701/界面/状态栏/App.vue\n\n}');
+  },
+  "./src/房东模拟器-012701/界面/状态栏/App.vue?vue&type=template&id=9d81fb88"(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+    eval('{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   render: () => (/* reexport safe */ _node_modules_pnpm_unplugin_2_3_11_node_modules_unplugin_dist_webpack_loaders_transform_js_unplugin_vue_components_node_modules_pnpm_unplugin_2_3_11_node_modules_unplugin_dist_webpack_loaders_transform_js_unplugin_auto_import_node_modules_pnpm_vue_loader_17_4_2_vue_3_5_2_950b954033f7ef31b6c40554a1f5a482_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_pnpm_vue_loader_17_4_2_vue_3_5_2_950b954033f7ef31b6c40554a1f5a482_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_6_use_0_App_vue_vue_type_template_id_9d81fb88__WEBPACK_IMPORTED_MODULE_0__.render)\n/* harmony export */ });\n/* harmony import */ var _node_modules_pnpm_unplugin_2_3_11_node_modules_unplugin_dist_webpack_loaders_transform_js_unplugin_vue_components_node_modules_pnpm_unplugin_2_3_11_node_modules_unplugin_dist_webpack_loaders_transform_js_unplugin_auto_import_node_modules_pnpm_vue_loader_17_4_2_vue_3_5_2_950b954033f7ef31b6c40554a1f5a482_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_4_node_modules_pnpm_vue_loader_17_4_2_vue_3_5_2_950b954033f7ef31b6c40554a1f5a482_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_6_use_0_App_vue_vue_type_template_id_9d81fb88__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-vue-components!../../../../node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-auto-import!../../../../node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!../../../../node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/index.js??ruleSet[1].rules[6].use[0]!./App.vue?vue&type=template&id=9d81fb88 */ "./node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-vue-components!./node_modules/.pnpm/unplugin@2.3.11/node_modules/unplugin/dist/webpack/loaders/transform.js??unplugin-auto-import!./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[4]!./node_modules/.pnpm/vue-loader@17.4.2_vue@3.5.2_950b954033f7ef31b6c40554a1f5a482/node_modules/vue-loader/dist/index.js??ruleSet[1].rules[6].use[0]!./src/房东模拟器-012701/界面/状态栏/App.vue?vue&type=template&id=9d81fb88");\n/* unplugin-vue-components disabled *///# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMv5oi/5Lic5qih5ouf5ZmoLTAxMjcwMS/nlYzpnaIv54q25oCB5qCPL0FwcC52dWU/dnVlJnR5cGU9dGVtcGxhdGUmaWQ9OWQ4MWZiODgiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBQSIsInNvdXJjZXMiOlsid2VicGFjazovL3RhdmVybl9oZWxwZXJfdGVtcGxhdGUvc3JjL+aIv+S4nOaooeaLn+WZqC0wMTI3MDEv55WM6Z2iL+eKtuaAgeagjy9BcHAudnVlPzNjNGEiXSwic291cmNlc0NvbnRlbnQiOlsiLyogdW5wbHVnaW4tdnVlLWNvbXBvbmVudHMgZGlzYWJsZWQgKi9leHBvcnQgKiBmcm9tIFwiLSEuLi8uLi8uLi8uLi9ub2RlX21vZHVsZXMvLnBucG0vdW5wbHVnaW5AMi4zLjExL25vZGVfbW9kdWxlcy91bnBsdWdpbi9kaXN0L3dlYnBhY2svbG9hZGVycy90cmFuc2Zvcm0uanM/P3VucGx1Z2luLXZ1ZS1jb21wb25lbnRzIS4uLy4uLy4uLy4uL25vZGVfbW9kdWxlcy8ucG5wbS91bnBsdWdpbkAyLjMuMTEvbm9kZV9tb2R1bGVzL3VucGx1Z2luL2Rpc3Qvd2VicGFjay9sb2FkZXJzL3RyYW5zZm9ybS5qcz8/dW5wbHVnaW4tYXV0by1pbXBvcnQhLi4vLi4vLi4vLi4vbm9kZV9tb2R1bGVzLy5wbnBtL3Z1ZS1sb2FkZXJAMTcuNC4yX3Z1ZUAzLjUuMl85NTBiOTU0MDMzZjdlZjMxYjZjNDA1NTRhMWY1YTQ4Mi9ub2RlX21vZHVsZXMvdnVlLWxvYWRlci9kaXN0L3RlbXBsYXRlTG9hZGVyLmpzPz9ydWxlU2V0WzFdLnJ1bGVzWzRdIS4uLy4uLy4uLy4uL25vZGVfbW9kdWxlcy8ucG5wbS92dWUtbG9hZGVyQDE3LjQuMl92dWVAMy41LjJfOTUwYjk1NDAzM2Y3ZWYzMWI2YzQwNTU0YTFmNWE0ODIvbm9kZV9tb2R1bGVzL3Z1ZS1sb2FkZXIvZGlzdC9pbmRleC5qcz8/cnVsZVNldFsxXS5ydWxlc1s2XS51c2VbMF0hLi9BcHAudnVlP3Z1ZSZ0eXBlPXRlbXBsYXRlJmlkPTlkODFmYjg4XCIiXSwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/房东模拟器-012701/界面/状态栏/App.vue?vue&type=template&id=9d81fb88\n\n}');
+  },
+  "./src/房东模拟器-012701/界面/状态栏/global.css"(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+    eval("{__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMv5oi/5Lic5qih5ouf5ZmoLTAxMjcwMS/nlYzpnaIv54q25oCB5qCPL2dsb2JhbC5jc3MiLCJtYXBwaW5ncyI6IjtBQUFBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vdGF2ZXJuX2hlbHBlcl90ZW1wbGF0ZS9zcmMv5oi/5Lic5qih5ouf5ZmoLTAxMjcwMS/nlYzpnaIv54q25oCB5qCPL2dsb2JhbC5jc3M/NDA3YSJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBleHRyYWN0ZWQgYnkgbWluaS1jc3MtZXh0cmFjdC1wbHVnaW5cbmV4cG9ydCB7fTsiXSwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/房东模拟器-012701/界面/状态栏/global.css\n\n}");
+  },
+  "./src/房东模拟器-012701/界面/状态栏/index.ts"(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+    eval('{__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var async_wait_until__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! async-wait-until */ "async-wait-until");\n/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue */ "./src/房东模拟器-012701/界面/状态栏/App.vue");\n/* harmony import */ var _global_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./global.css */ "./src/房东模拟器-012701/界面/状态栏/global.css");\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "vue");\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var pinia__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! pinia */ "pinia");\n\n\n\n\n\n\n$(async () => {\n    await waitGlobalInitialized(\'Mvu\');\n    await (0,async_wait_until__WEBPACK_IMPORTED_MODULE_0__.waitUntil)(() => _.has(getVariables({ type: \'message\' }), \'stat_data\'));\n    (0,vue__WEBPACK_IMPORTED_MODULE_3__.createApp)(_App_vue__WEBPACK_IMPORTED_MODULE_1__["default"]).use((0,pinia__WEBPACK_IMPORTED_MODULE_4__.createPinia)()).mount(\'#app\');\n});\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMv5oi/5Lic5qih5ouf5ZmoLTAxMjcwMS/nlYzpnaIv54q25oCB5qCPL2luZGV4LnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFBNkM7QUFDakI7QUFDTjs7OztBQUN0QixDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDZCxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDdEMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQywyREFBUyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDO0FBQ2hGLENBQUMsQ0FBQyxDQUFDLENBQUMsOENBQVMsQ0FBQyxnREFBRyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxrREFBVyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7QUFDbkQsQ0FBQyxDQUFDIiwic291cmNlcyI6WyJzcmM6Ly90YXZlcm5faGVscGVyX3RlbXBsYXRlL3NyYy/miL/kuJzmqKHmi5/lmagtMDEyNzAxL+eVjOmdoi/nirbmgIHmoI8vaW5kZXgudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgd2FpdFVudGlsIH0gZnJvbSAnYXN5bmMtd2FpdC11bnRpbCc7XG5pbXBvcnQgQXBwIGZyb20gJy4vQXBwLnZ1ZSc7XG5pbXBvcnQgJy4vZ2xvYmFsLmNzcyc7XG4kKGFzeW5jICgpID0+IHtcbiAgICBhd2FpdCB3YWl0R2xvYmFsSW5pdGlhbGl6ZWQoJ012dScpO1xuICAgIGF3YWl0IHdhaXRVbnRpbCgoKSA9PiBfLmhhcyhnZXRWYXJpYWJsZXMoeyB0eXBlOiAnbWVzc2FnZScgfSksICdzdGF0X2RhdGEnKSk7XG4gICAgY3JlYXRlQXBwKEFwcCkudXNlKGNyZWF0ZVBpbmlhKCkpLm1vdW50KCcjYXBwJyk7XG59KTtcbiJdLCJuYW1lcyI6W10sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/房东模拟器-012701/界面/状态栏/index.ts\n\n}');
+  },
+  "async-wait-until"(module) {
+    module.exports = __WEBPACK_EXTERNAL_MODULE_https_testingcf_jsdelivr_net_npm_async_wait_until_esm_ee35c30e__;
+  },
+  pinia(module) {
+    module.exports = __WEBPACK_EXTERNAL_MODULE_https_testingcf_jsdelivr_net_npm_pinia_esm_b723a504__;
+  },
+  vue(module) {
+    module.exports = Vue;
+  }
+};
+
+var __webpack_module_cache__ = {};
+
+function __webpack_require__(moduleId) {
+  var cachedModule = __webpack_module_cache__[moduleId];
+  if (cachedModule !== undefined) {
+    return cachedModule.exports;
+  }
+  if (__webpack_modules__[moduleId] === undefined) {
+    var e = new Error("Cannot find module '" + moduleId + "'");
+    e.code = "MODULE_NOT_FOUND";
+    throw e;
+  }
+  var module = __webpack_module_cache__[moduleId] = {
+    exports: {}
+  };
+  __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+  return module.exports;
+}
+
+(() => {
+  __webpack_require__.n = module => {
+    var getter = module && module.__esModule ? () => module["default"] : () => module;
+    __webpack_require__.d(getter, {
+      a: getter
+    });
+    return getter;
+  };
+})();
+
+(() => {
+  __webpack_require__.d = (exports, definition) => {
+    for (var key in definition) {
+      if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+        Object.defineProperty(exports, key, {
+          enumerable: true,
+          get: definition[key]
+        });
+      }
+    }
+  };
+})();
+
+(() => {
+  __webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
+})();
+
+(() => {
+  __webpack_require__.r = exports => {
+    if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
+      Object.defineProperty(exports, Symbol.toStringTag, {
+        value: "Module"
+      });
+    }
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+  };
+})();
+
+var __webpack_exports__ = __webpack_require__("./src/房东模拟器-012701/界面/状态栏/index.ts");</script><style>/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/.pnpm/css-loader@7.1.3_webpack@5.104.1/node_modules/css-loader/dist/cjs.js??clonedRuleSet-88.use[1]!./node_modules/.pnpm/postcss-loader@8.2.0_postcs_7d63b02763e68f083d716dcbb7369b8a/node_modules/postcss-loader/dist/cjs.js!./src/房东模拟器-012701/界面/状态栏/global.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
+
+</style></head>
+  <body>
+    <div id="app" class="card">
+      <div class="top">
+        <div>
+          <div class="time">{{ stat['当前时间'] || '—' }}</div>
+        </div>
+        <div class="top-stats">
+          <div class="stat">
+            <span>资金: <strong>{{ stat['主角资金'] ?? '—' }}</strong>--</span>
+            <span>公寓知名度: <strong>{{ stat['公寓知名度'] ?? '—' }}</strong>--</span>
+            <span>酒吧知名度: <strong>{{ stat['酒吧知名度'] ?? '—' }}</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button :class="{active:tab==='房客'}" @click="tab='房客'">
+          <span class="tab-icon">👥</span>
+        </button>
+        <button :class="{active:tab==='道具'}" @click="tab='道具'">
+          <span class="tab-icon">🎮</span>
+        </button>
+        <button :class="{active:tab==='监控'}" @click="tab='监控'">
+          <span class="tab-icon">📱</span>
+        </button>
+        <button :class="{active:tab==='事务'}" @click="tab='事务'">
+          <span class="tab-icon">📅</span>
+        </button>
+      </div>
+
+      <div v-if="tab==='房客'">
+        <div class="room-tabs">
+          <button v-for="r in rooms" :key="r" :class="{active:activeRoom===r}" @click="setRoom(r)">{{ r }}</button>
+        </div>
+
+        <div id="room-content">
+          <div v-if="guest" class="guest-panel">
+            <div class="guest-header">
+              <div class="char-portrait">
+                <img v-if="portraitSrc" :src="portraitSrc" :alt="guestName" />
+              </div>
+              <div class="guest-info-vertical">
+                <div class="guest-name">{{ guestName }}</div>
+                <div class="guest-meta">
+                  <span>{{ (guest['基本信息'] && guest['基本信息']['种族']) ?? '—' }}</span>
+                  <span>{{ (guest['基本信息'] && guest['基本信息']['等级']) ?? '—' }}</span>
+                </div>
+                <div class="progress-item">
+                  <div>好感度: <strong>{{ guest.好感度 ?? 0 }}</strong></div>
+                  <div class="bar-container"><div class="bar" :style="{width: (guest.好感度||0) + '%'}"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div>堕落度: <strong>{{ guest.堕落度 ?? 0 }}</strong></div>
+                  <div class="bar-container">
+                    <div class="bar warn" :style="{width: (guest.堕落度||0) + '%'}"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cards">
+              <div class="card-block">
+                <h4 :class="{collapsed: isOutfitCollapsed}" @click="toggleCollapse('outfit')">
+                  <span class="collapsible-header">
+                    <span class="collapse-icon">▼</span>
+                    着装
+                  </span>
+                </h4>
+                <div class="card-content" :style="{maxHeight: isOutfitCollapsed ? '0px' : '500px'}">
+                  <div class="card-grid">
+                    <div class="card-item" v-for="k in outfitKeys" :key="k">
+                      <strong>{{ k }}</strong>
+                      <div>{{ (guest['着装'] && guest['着装'][k]) ?? '—' }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="guest-info">
+              <div>当前心情: <strong>{{ guest['当前心情'] ?? '—' }}</strong></div>
+              <div>正在干嘛: <strong>{{ guest['正在干嘛'] ?? '—' }}</strong></div>
+              <div>当前计划: <strong>{{ guest['当前计划'] ?? '—' }}</strong></div>
+            </div>
+          </div>
+          <div v-else class="empty-room">房间暂无房客</div>
+        </div>
+      </div>
+
+      <div v-if="tab==='道具'">
+        <div v-if="Object.keys(items).length === 0" class="empty-state" data-type="props">背包空空如也</div>
+        <div v-else class="list-cards">
+          <div class="card-block" v-for="(it,k) in items" :key="k">
+            <h4>{{ k }}</h4>
+            <div>{{ it['描述'] ?? it['description'] ?? '—' }}</div>
+            <div>数量: {{ it['数量'] ?? it['count'] ?? '—' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="tab==='监控'">
+        <div v-if="Object.keys(monitors).length === 0" class="empty-state" data-type="monitor">暂无监控设备</div>
+        <div v-else class="list-cards">
+          <div class="card-block" v-for="(v,k) in monitors" :key="k">
+            <h4>{{ k }}</h4>
+            <div>{{ v }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="tab==='事务'">
+        <div v-if="tasks.length === 0" class="empty-state" data-type="tasks">暂无待处理事务</div>
+        <div v-else class="list-cards">
+          <div class="card-block" v-for="(t,idx) in tasks" :key="idx">
+            <div>{{ t }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const { createApp, ref, computed, onMounted } = Vue;
+
+      function _getGlobal(name) {
+        return window[name];
+      }
+      function getAllVariables() {
+        return typeof _getGlobal('getAllVariables') === 'function'
+          ? _getGlobal('getAllVariables')()
+          : window.__mock_variables || {};
+      }
+      async function waitInit() {
+        const f = _getGlobal('waitGlobalInitialized');
+        if (typeof f === 'function') await f('Mvu');
+      }
+
+      createApp({
+        setup() {
+          const tab = ref('房客');
+          const rooms = ['201', '202', '203', '204', '205'];
+          const activeRoom = ref(rooms[0]);
+          const vars = ref(getAllVariables());
+          const stat = computed(() => vars.value.stat_data || {});
+
+          // 折叠状态
+          const isBasicCollapsed = ref(true);
+          const isOutfitCollapsed = ref(true);
+
+          function setRoom(r) {
+            activeRoom.value = r;
+          }
+
+          function toggleCollapse(type) {
+            if (type === 'basic') {
+              isBasicCollapsed.value = !isBasicCollapsed.value;
+            } else if (type === 'outfit') {
+              isOutfitCollapsed.value = !isOutfitCollapsed.value;
+            }
+          }
+
+          const guestNames = computed(() => Object.keys(stat.value['房客'] || {}));
+          const guestIndex = computed(() => rooms.indexOf(activeRoom.value));
+          const guestName = computed(() => guestNames.value[guestIndex.value] || null);
+          const guest = computed(() => (guestName.value ? stat.value['房客'][guestName.value] : null));
+
+          const portraitSrc = computed(() => {
+            if (!guest.value) return null;
+            const g = guest.value;
+            let cand = g['立绘'] || g['portrait'] || g['头像'] || g['avatar'] || g['avatarUrl'] || g['image'];
+            const name = guestName.value || '';
+            // 使用 jsDelivr CDN 以提高中国大陆可访问性（指向仓库的 img 目录）
+            const repoRawBase = 'https://cdn.jsdelivr.net/gh/NoteBene/tavern_room@main/img';
+
+            // 若为数组，则取第一项；确保为字符串
+            if (Array.isArray(cand)) cand = cand[0];
+            if (!cand) {
+              return `${repoRawBase}/默认角色1.jpg`;
+            }
+            cand = String(cand).trim();
+
+            // 已经是绝对 URL，直接返回
+            if (/^https?:\/\//.test(cand)) return cand;
+            // 新增角色名称检查逻辑
+            if (name !== '虞汐' && name !== '小萌') {
+              return `${repoRawBase}/默认角色1.jpg`;
+            }
+
+            // 如果包含路径分隔符，尝试按仓库 img 路径构造（允许传入 img/角色/文件.jpg 或 角色/文件.jpg）
+            if (cand.includes('/')) {
+              const parts = cand.split('/').filter(Boolean);
+              // 如果以 img 开头，去掉该部分
+              if (parts[0] === 'img') parts.shift();
+              const folder = parts.shift() || name;
+              let file = parts.join('/');
+              if (!file) {
+                // 优先使用房客变量中的 `立绘` 字段（允许：常服、内衣、情趣内衣、裸体、精液）
+                const lp = (g && g['立绘']) || '内衣';
+                file = String(lp || '内衣');
+                if (!/\.[a-zA-Z0-9]+$/.test(file)) file += '.jpg';
+              }
+              return `${repoRawBase}/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
+            }
+
+            // 若 cand 是单个文件名或不含扩展名，则视作文件名放在角色文件夹下
+            let filename = cand;
+            if (!/\.[a-zA-Z0-9]+$/.test(filename)) filename += '.jpg';
+            return `${repoRawBase}/${encodeURIComponent(name)}/${encodeURIComponent(filename)}`;
+          });
+
+          const basicKeys = ['种族', '等级', '身高', '三围', '罩杯', '年龄'];
+          const outfitKeys = ['上装', '下装', '内衣', '袜子', '鞋子', '饰品'];
+
+          const items = computed(() => stat.value['物品栏'] || {});
+          const monitors = computed(() => stat.value['可监控区域'] || {});
+          const tasks = computed(() => stat.value['近期事务'] || []);
+
+          onMounted(async () => {
+            await waitInit();
+            function tick() {
+              vars.value = getAllVariables();
+            }
+            tick();
+            setInterval(tick, 2000);
+          });
+
+          return {
+            tab,
+            rooms,
+            activeRoom,
+            setRoom,
+            stat,
+            guest,
+            guestName,
+            portraitSrc,
+            basicKeys,
+            outfitKeys,
+            items,
+            monitors,
+            tasks,
+            isBasicCollapsed,
+            isOutfitCollapsed,
+            toggleCollapse,
+          };
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>

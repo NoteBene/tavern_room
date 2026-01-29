@@ -173,18 +173,10 @@
         margin-bottom: 8px;
       }
 
-      .guest-name {
-        font-size: 16px;
-        font-weight: bold;
-        color: #5d4037;
-        border-bottom: 2px solid var(--cream-dark);
-        padding-bottom: 4px;
-      }
-
       .char-portrait {
-        width: 64px;
-        height: 64px;
-        flex: 0 0 64px;
+        width: 90px; /* 放大至9:16比例 */
+        height: 128px; /* 9:16比例 */
+        flex: 0 0 auto;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -201,57 +193,38 @@
         display: block;
       }
 
-      .progress-row {
-        display: flex;
-        gap: 8px;
+      .guest-info-vertical {
+        gap: 10px; /* 增大上下间距 */
       }
 
-      /* 每一项横排：标签 | 进度条（伸缩） | 数值 */
-      .progress-item {
-        flex: 1;
-        min-width: 100px;
-        background: var(--cream-dark);
-        padding: 8px;
-        border-radius: 6px;
-        border: 1px solid var(--border-light);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .progress-label {
-        font-size: 11px;
+      .guest-meta {
+        font-size: 10px;
         color: #795548;
-        font-weight: 500;
-        width: 64px;
-        flex: 0 0 64px;
+        display: flex;
+        gap: 8px;
       }
 
-      .progress-value {
-        font-size: 14px;
-        font-weight: bold;
-        color: var(--primary-brown);
-        width: 48px;
-        text-align: right;
-        flex: 0 0 48px;
+      .progress-item {
+        font-size: 14px; /* 减小整体字号 */
+        line-height: 1.2;
+      }
+
+      .progress-item strong {
+        font-size: 14px; /* 数值略大保持可读性 */
+        font-weight: 600;
+      }
+
+      .bar-container {
+        height: 8px; /* 适当缩小进度条高度 */
       }
 
       .bar {
-        height: 8px;
-        background: #e0e0e0;
-        border-radius: 4px;
-        overflow: hidden;
-        flex: 1 1 auto;
-      }
-
-      .bar > i {
-        display: block;
         height: 100%;
         background: linear-gradient(to right, #4caf50, #8bc34a);
         transition: width 0.5s ease;
       }
 
-      .bar.warn > i {
+      .bar.warn {
         background: linear-gradient(to right, #f44336, #ff9800);
       }
 
@@ -426,7 +399,7 @@
         }
         .stat {
           flex: 1;
-          min-width: 100px;
+          min-width: 40px;
         }
         .tabs {
           flex-wrap: wrap;
@@ -448,9 +421,11 @@
           <div class="time">{{ stat['当前时间'] || '—' }}</div>
         </div>
         <div class="top-stats">
-          <div class="stat">资金: <strong>{{ stat['主角资金'] ?? '—' }}</strong></div>
-          <div class="stat">公寓知名度: <strong>{{ stat['公寓知名度'] ?? '—' }}</strong></div>
-          <div class="stat">酒吧知名度: <strong>{{ stat['酒吧知名度'] ?? '—' }}</strong></div>
+          <div class="stat">
+            <span>资金: <strong>{{ stat['主角资金'] ?? '—' }}</strong>--</span>
+            <span>公寓知名度: <strong>{{ stat['公寓知名度'] ?? '—' }}</strong>--</span>
+            <span>酒吧知名度: <strong>{{ stat['酒吧知名度'] ?? '—' }}</strong></span>
+          </div>
         </div>
       </div>
 
@@ -480,41 +455,26 @@
               <div class="char-portrait">
                 <img v-if="portraitSrc" :src="portraitSrc" :alt="guestName" />
               </div>
-              <div class="guest-name">{{ guestName }}</div>
-            </div>
-
-            <div class="progress-row">
-              <div class="progress-item">
-                <div class="progress-label">好感度</div>
-                <div class="bar"><i :style="{width: (guest.好感度||0) + '%'}"></i></div>
-                <div class="progress-value">{{ guest.好感度 ?? 0 }}</div>
-              </div>
-
-              <div class="progress-item">
-                <div class="progress-label">堕落度</div>
-                <div class="bar warn"><i :style="{width: (guest.堕落度||0) + '%'}"></i></div>
-                <div class="progress-value">{{ guest.堕落度 ?? 0 }}</div>
+              <div class="guest-info-vertical">
+                <div class="guest-name">{{ guestName }}</div>
+                <div class="guest-meta">
+                  <span>{{ (guest['基本信息'] && guest['基本信息']['种族']) ?? '—' }}</span>
+                  <span>{{ (guest['基本信息'] && guest['基本信息']['等级']) ?? '—' }}</span>
+                </div>
+                <div class="progress-item">
+                  <div>好感度: <strong>{{ guest.好感度 ?? 0 }}</strong></div>
+                  <div class="bar-container"><div class="bar" :style="{width: (guest.好感度||0) + '%'}"></div></div>
+                </div>
+                <div class="progress-item">
+                  <div>堕落度: <strong>{{ guest.堕落度 ?? 0 }}</strong></div>
+                  <div class="bar-container">
+                    <div class="bar warn" :style="{width: (guest.堕落度||0) + '%'}"></div>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="cards">
-              <div class="card-block">
-                <h4 :class="{collapsed: isBasicCollapsed}" @click="toggleCollapse('basic')">
-                  <span class="collapsible-header">
-                    <span class="collapse-icon">▼</span>
-                    基本信息
-                  </span>
-                </h4>
-                <div class="card-content" :style="{maxHeight: isBasicCollapsed ? '0px' : '500px'}">
-                  <div class="card-grid">
-                    <div class="card-item" v-for="k in basicKeys" :key="k">
-                      <strong>{{ k }}</strong>
-                      <div>{{ (guest['基本信息'] && guest['基本信息'][k]) ?? '—' }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div class="card-block">
                 <h4 :class="{collapsed: isOutfitCollapsed}" @click="toggleCollapse('outfit')">
                   <span class="collapsible-header">
@@ -630,13 +590,16 @@
             // 若为数组，则取第一项；确保为字符串
             if (Array.isArray(cand)) cand = cand[0];
             if (!cand) {
-              // 默认使用角色文件夹中的一张图片（示例要求默认为 内衣.jpg）
-              return `${repoRawBase}/${encodeURIComponent(name)}/${encodeURIComponent('内衣.jpg')}`;
+              return `${repoRawBase}/默认角色1.jpg`;
             }
             cand = String(cand).trim();
 
             // 已经是绝对 URL，直接返回
             if (/^https?:\/\//.test(cand)) return cand;
+            // 新增角色名称检查逻辑
+            if (name !== '虞汐' && name !== '小萌') {
+              return `${repoRawBase}/默认角色1.jpg`;
+            }
 
             // 如果包含路径分隔符，尝试按仓库 img 路径构造（允许传入 img/角色/文件.jpg 或 角色/文件.jpg）
             if (cand.includes('/')) {
