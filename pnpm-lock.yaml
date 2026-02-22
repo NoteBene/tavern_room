@@ -1318,9 +1318,12 @@ packages:
   brace-expansion@1.1.12:
     resolution: {integrity: sha512-9T9UjW3r0UW5c1Q7GTwllptXwhvYmEzFhzMfZ9H7FQWt+uZePjZPjBP/W1ZEyZ1twGWom5/56TF4lPcqjnDHcg==}
 
+<<<<<<< HEAD
   brace-expansion@2.0.2:
     resolution: {integrity: sha512-Jt0vHyM+jmUBqojB7E1NIYadt0vI0Qxjxd2TErW94wDz+E2LAm5vKMXXwg6ZZBTHPuUlDgQHKXvjGBdfcF1ZDQ==}
 
+=======
+>>>>>>> 72a51d17062514fb40787823c97af1af514bf0f1
   brace-expansion@5.0.2:
     resolution: {integrity: sha512-Pdk8c9poy+YhOgVWw1JNN22/HcivgKWwpxKq04M/jTmHyCZn12WPJebZxdjSa5TmBqISrUSgNYU3eRORljfCCw==}
     engines: {node: 20 || >=22}
@@ -2876,8 +2879,13 @@ packages:
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
+<<<<<<< HEAD
   minimatch@9.0.5:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
+=======
+  minimatch@9.0.6:
+    resolution: {integrity: sha512-kQAVowdR33euIqeA0+VZTDqU+qo1IeVY+hrKYtZMio3Pg0P0vuh/kwRylLUddJhB6pf3q/botcOvRtx4IN1wqQ==}
+>>>>>>> 72a51d17062514fb40787823c97af1af514bf0f1
     engines: {node: '>=16 || 14 >=14.17'}
 
   minimist@1.2.8:
@@ -4626,7 +4634,11 @@ snapshots:
       '@typescript-eslint/types': 8.56.0
       '@typescript-eslint/visitor-keys': 8.56.0
       debug: 4.4.3
+<<<<<<< HEAD
       minimatch: 9.0.5
+=======
+      minimatch: 9.0.6
+>>>>>>> 72a51d17062514fb40787823c97af1af514bf0f1
       semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@6.0.0-dev.20250807)
@@ -5124,10 +5136,13 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
+<<<<<<< HEAD
   brace-expansion@2.0.2:
     dependencies:
       balanced-match: 1.0.2
 
+=======
+>>>>>>> 72a51d17062514fb40787823c97af1af514bf0f1
   brace-expansion@5.0.2:
     dependencies:
       balanced-match: 4.0.3
@@ -6920,9 +6935,15 @@ snapshots:
     dependencies:
       brace-expansion: 1.1.12
 
+<<<<<<< HEAD
   minimatch@9.0.5:
     dependencies:
       brace-expansion: 2.0.2
+=======
+  minimatch@9.0.6:
+    dependencies:
+      brace-expansion: 5.0.2
+>>>>>>> 72a51d17062514fb40787823c97af1af514bf0f1
 
   minimist@1.2.8: {}
 
