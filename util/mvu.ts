@@ -36,10 +36,17 @@ export function defineMvuDataStore<T extends z.ZodObject>(
           ignoreUpdates(() => {
             data.value = result.data;
           });
+<<<<<<< HEAD
         }
         if (!_.isEqual(stat_data, result.data)) {
           updateVariablesWith(variables => _.set(variables, 'stat_data', result.data), variable_option);
         }
+=======
+          if (!_.isEqual(stat_data, result.data)) {
+            updateVariablesWith(variables => _.set(variables, 'stat_data', result.data), variable_option);
+          }
+        }
+>>>>>>> 95299edcaebf7bb81b1a8d87fb1226c74ed1188a
       }, 2000);
 
       const { ignoreUpdates } = watchIgnorable(
