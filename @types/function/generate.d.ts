@@ -1,4 +1,11 @@
 /**
+ * 获取代理预设名称列表
+ *
+ * @returns 代理预设名称列表
+ */
+declare function getProxyPresetNames(): string[];
+
+/**
  * 使用酒馆当前启用的预设, 让 AI 生成一段文本.
  *
  * 该函数在执行过程中将会发送以下事件:
@@ -51,6 +58,27 @@
  *     key: 'your-api-key',
  *     model: 'gpt-4',
  *     source: 'openai'
+ *   }
+ * });
+ * console.info('收到回复: ', result);
+ *
+ * @example
+ * // 使用酒馆代理预设
+ * const result = await generate({
+ *   user_input: '你好',
+ *   custom_api: {
+ *     proxy_preset: 'MyProxy',
+ *     model: 'gpt-4',
+ *   }
+ * });
+ * console.info('收到回复: ', result);
+ *
+ * @example
+ * // 使用当前 ST 源，但切换模型
+ * const result = await generate({
+ *   user_input: '你好',
+ *   custom_api: {
+ *     model: 'gpt-4-turbo',
  *   }
  * });
  * console.info('收到回复: ', result);
@@ -260,14 +288,26 @@ type Overrides = {
 
 /**
  * 自定义API配置
+ *
+ * 所有字段均为可选：
+ * - 指定 proxy_preset：使用酒馆代理预设的 URL 和 Key
+ * - 指定 apiurl：使用自定义 API 地址
+ * - 都不指定：使用当前 ST 源，但可覆盖 model 等参数
  */
 type CustomApiConfig = {
+  /**
+   * 酒馆代理预设名称。
+   * - 预设匹配成功：完全使用预设的 URL 和密码（即使为空也不回退到 custom_api 的字段）
+   * - 预设未找到：回退到 custom_api.apiurl 和 custom_api.key
+   * 注意：名称需完全一致（大小写敏感，前后空格会被自动去除）
+   */
+  proxy_preset?: string;
   /** 自定义API地址 */
-  apiurl: string;
+  apiurl?: string;
   /** API密钥 */
   key?: string;
   /** 模型名称 */
-  model: string;
+  model?: string;
   /** API源, 默认为 'openai'. 目前支持的源请查看酒馆官方代码[`SillyTavern/src/constants.js`](https://github.com/SillyTavern/SillyTavern/blob/2e3dff73a127679f643e971801cd51173c2c34e7/src/constants.js#L164) */
   source?: string;
 
