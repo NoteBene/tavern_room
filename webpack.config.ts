@@ -188,6 +188,15 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
     watchOptions: {
       ignored: ['**/dist', '**/node_modules'],
     },
+    devServer: {
+      static: {
+        directory: path.join(import.meta.dirname, 'dist'),
+      },
+      port: config.port,
+      open: true,
+      hot: true,
+      compress: true,
+    },
     entry: path.join(import.meta.dirname, entry.script),
     target: 'browserslist',
     output: {

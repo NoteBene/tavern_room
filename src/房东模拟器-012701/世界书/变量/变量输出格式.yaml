@@ -3,11 +3,11 @@
   rule:
     - you must output the update analysis and the actual update commands at once in the end of the next reply
     - the update commands works like the **JSON Patch (RFC 6902)** standard, must be a valid JSON array containing operation objects, but supports the following operations instead:
-      - replace: replace the value of existing paths
-      - delta: update the value of existing number paths by a delta value
-      - insert: insert new items into an object or array (using `-` as array index intends appending to the end)
-      - remove
-      - move
+        - replace: replace the value of existing paths
+        - delta: update the value of existing number paths by a delta value
+        - insert: insert new items into an object or array (using `-` as array index intends appending to the end)
+        - remove
+        - move
     - don't update field names starts with `_` as they are readonly, such as `_变量`
   format: |-
     <UpdateVariable>
@@ -25,8 +25,36 @@
       { "op": "remove", "path": "${/path/to/object/key}" },
       { "op": "remove", "path": "${/path/to/array/0}" },
       { "op": "move", "from": "${/path/to/variable}", "to": "${/path/to/another/path}" },
-      {"op":"insert","path":"/房客/伊莉雅": "超赞","身高": 167,"三围": "B94 - W61 - H95","罩杯": "F", "年龄": 22},"好感度": 18,"堕落度": 0,"着装": {"上装": "背心", "下装": "短裤","内衣": "蕾丝","袜子": "无", "鞋子": "人字拖","饰品": "无"},"当前心情": "开心","正在干嘛": "入住","当前计划": "收拾行李", "解锁路线": ["自定义","自定义（条件说明）"]}},
       ...
     ]
     </JSONPatch>
     </UpdateVariable>
+  examples:
+    角色状态更新: |-
+      <UpdateVariable>
+      <Analysis>
+      - Time: 5 hours passed, now 17:44
+      - 玥玥 took off her underwear voluntarily and invited the landlord.
+      - 玥玥's dressing modified because her T-shirt was partially removed, now upper body topless.
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "replace", "path": "/当前时间", "value": "2026年1月2日 周三 17:44" },
+        { "op": "replace", "path": "/房客/玥玥/正在干嘛", "value": "主动脱下内衣邀请房东" },
+        { "op": "replace", "path": "/房客/玥玥/当前计划", "value": "今晚不得强上了房东" },
+        { "op": "replace", "path": "/房客/玥玥/立绘", "value": "mkSp4zBR/yueyue-4" },
+        { "op": "replace", "path": "/房客/玥玥/着装/上装", "value": "内衣被完全脱下，漏出雪白的胸部" },
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+    完成阶段条件: |-
+      <UpdateVariable>
+      <Analysis>
+      - Complete the stage advancement requirements and 玥玥 move on to the next stage
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "replace", "path": "/房客/虞汐/角色阶段", "value": 1 },
+      ]
+      </JSONPatch>
+      </UpdateVariable>

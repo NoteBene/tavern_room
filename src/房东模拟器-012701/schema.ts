@@ -1,5 +1,5 @@
 export const Schema = z.object({
-  当前时间: z.string().prefault('2026年1月1日 周一 08:00'), // 格式: xx年x月x日 周X xx:xx
+  当前时间: z.string().prefault('2026年1月1日 周二 08:00'), // 格式: xx年x月x日 周X xx:xx
   近期事务: z.array(z.string()).prefault([]), // 记录重要代办事件
 
   主角资金: z.coerce.number().prefault(1000), // 初始资金，人民币
@@ -35,17 +35,6 @@ export const Schema = z.object({
     .record(
       z.string().describe('房客姓名'),
       z.object({
-        基本信息: z
-          .object({
-            种族: z.string().prefault('人类-程序员'),
-            等级: z.string().prefault('超赞'),
-            身高: z.coerce.number().prefault(160), // 厘米
-            三围: z.string().prefault('88-58-86'), // B-W-H格式
-            罩杯: z.string().prefault('C'),
-            年龄: z.coerce.number().prefault(20),
-          })
-          .prefault({}),
-
         好感度: z.coerce
           .number()
           .transform(value => _.clamp(value, 0, 100))
@@ -67,14 +56,12 @@ export const Schema = z.object({
           .prefault({}),
 
         // 立绘类型：可选值用于在 UI 中选择角色的默认立绘
-        立绘: z.enum(['常服', '内衣', '情趣内衣', '裸体', '精液']).prefault('常服'),
+        立绘: z.string().prefault(''),
 
-        当前心情: z.string().prefault('普通'),
         正在干嘛: z.string().prefault('在房间休息'),
         当前计划: z.string().prefault('无'),
 
-        当前解锁阶段: z.number().int().min(0).prefault(0),
-        解锁路线: z.array(z.string()).prefault([]),
+        角色阶段: z.number().int().min(0).prefault(0),
       }),
     )
     .prefault({}),

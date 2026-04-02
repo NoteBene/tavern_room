@@ -1,0 +1,145 @@
+---
+变量输出格式:
+  rule:
+    - you must output the update analysis and the actual update commands at once in the end of the next reply
+    - the update commands works like the **JSON Patch (RFC 6902)** standard, must be a valid JSON array containing operation objects
+    - supported operations: replace, delta, insert, remove
+    - don't update field names starts with `_` as they are readonly
+
+  format: |-
+    <UpdateVariable>
+    <Analysis>$(IN ENGLISH, no more than 80 words)
+    - ${calculate time passed: ...}
+    - ${analyze tenant/room changes based on current reply: ...}
+    - ${analyze relationship updates: ...}
+    </Analysis>
+    <JSONPatch>
+    [
+      { "op": "replace", "path": "${/path/to/variable}", "value": "${new_value}" },
+      { "op": "delta", "path": "${/path/to/number/variable}", "value": "${positive_or_negative_delta}" },
+      { "op": "insert", "path": "${/path/to/object/new_key}", "value": "${new_value}" },
+      { "op": "remove", "path": "${/path/to/item}" },
+      ...
+    ]
+    </JSONPatch>
+    </UpdateVariable>
+
+  examples:
+    新租客入住: |-
+      <UpdateVariable>
+      <Analysis>
+      - Time: 2 hours passed, now 17:44
+      - New tenant: 张小雪 moved into 三楼房间一
+      - Room update: assign 张小雪 to 三楼房间一
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "replace", "path": "/世界/时间", "value": "17:44" },
+        { "op": "insert", "path": "/租客列表/张小雪", "value": { "年龄": 22, "外貌": "黑长直少女", "职业": "大学生", "性格": "温柔内向", "状态": "正常", "内心": "对新环境有些紧张", "关系": { "<user>": "房东" } } },
+        { "op": "insert", "path": "/公寓/房间列表/三楼房间一", "value": { "类型": "卧室", "名称": "三楼房间一", "楼层": "三楼", "位置": "1-3", "住户": "张小雪", "描述": "张小雪的房间" } }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    时间流逝: |-
+      <UpdateVariable>
+      <Analysis>
+      - Time: next day morning
+      - Date change: 9月25日, 星期二
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "replace", "path": "/世界/日期", "value": "9月25日" },
+        { "op": "replace", "path": "/世界/星期", "value": "星期二" },
+        { "op": "replace", "path": "/世界/时间", "value": "08:00" }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    租客退租: |-
+      <UpdateVariable>
+      <Analysis>
+      - Tenant 张小雪 moved out
+      - Room 三楼房间一 is now empty
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "remove", "path": "/租客列表/张小雪" },
+        { "op": "replace", "path": "/公寓/房间列表/三楼房间一/住户", "value": "无" }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    租客状态更新: |-
+      <UpdateVariable>
+      <Analysis>
+      - 张小雪's mental state changed after conversation
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "replace", "path": "/租客列表/张小雪/状态", "value": "开心" },
+        { "op": "replace", "path": "/租客列表/张小雪/内心", "value": "和房东聊得很愉快" }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    新建房间: |-
+      <UpdateVariable>
+      <Analysis>
+      - Room creation: new bedroom at 三楼, position 4-6
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "insert", "path": "/公寓/房间列表/三楼新房间", "value": { "类型": "卧室", "名称": "三楼新房间", "楼层": "三楼", "位置": "4-6", "住户": "无", "描述": "新建的卧室" } }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    装修空房间为卧室: |-
+      <UpdateVariable>
+      <Analysis>
+      - Room renovation: 三楼空房间 -> 卧室
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "replace", "path": "/公寓/房间列表/三楼空房间/类型", "value": "卧室" }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    装修为功能性房间: |-
+      <UpdateVariable>
+      <Analysis>
+      - Room renovation: 三楼空房间 -> 功能性房间 (书房)
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "replace", "path": "/公寓/房间列表/三楼空房间/类型", "value": "功能性房间" },
+        { "op": "replace", "path": "/公寓/房间列表/三楼空房间/名称", "value": "书房" }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    拆除房间: |-
+      <UpdateVariable>
+      <Analysis>
+      - Room demolition: 三楼书房 removed
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "remove", "path": "/公寓/房间列表/三楼书房" }
+      ]
+      </JSONPatch>
+      </UpdateVariable>
+
+    新建楼层: |-
+      <UpdateVariable>
+      <Analysis>
+      - Floor creation: 五楼 added above existing floors
+      </Analysis>
+      <JSONPatch>
+      [
+        { "op": "insert", "path": "/公寓/楼层列表/0", "value": "五楼" }
+      ]
+      </JSONPatch>
+      </UpdateVariable>

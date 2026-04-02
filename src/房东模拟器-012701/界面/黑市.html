@@ -1,0 +1,477 @@
+//```
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>黑市面板</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    .store-cot-wrapper {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: transparent;
+      padding: 6px;
+      margin: 0;
+      display: block;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .store-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 8px auto;
+      background-color: #1e1e22;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      border: 4px solid #2a2a30;
+      overflow: hidden;
+      font-size: 14px;
+      line-height: normal;
+      white-space: normal;
+    }
+
+    .store-header {
+      height: 32px;
+      background-color: #2a2a30;
+      border-bottom: 2px solid #3d3d45;
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      gap: 8px;
+    }
+
+    .store-title {
+      flex: 1;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      opacity: 0.9;
+    }
+
+    .store-content {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .boss-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      background: #252529;
+      border-radius: 10px;
+      border: 1px solid #3d3d45;
+    }
+
+    .boss-avatar {
+      width: 120px;
+      height: 200px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border: 1px solid #3d3d45;
+      flex-shrink: 0;
+    }
+
+    .boss-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .boss-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .boss-status {
+      font-size: 12px;
+      color: #c0c0c8;
+      background: #2a2a30;
+      padding: 3px 8px;
+      border-radius: 10px;
+      border: 1px solid #4c4c55;
+      display: inline-block;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .items-section {
+      margin-top: 8px;
+    }
+
+    .items-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #4c4c55;
+      padding-bottom: 5px;
+    }
+
+    .items-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .store-item {
+      background: #252529;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid #3d3d45;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .store-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(167,139,250,0.15);
+      border-color: #a78bfa;
+    }
+
+    .item-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid #4c4c55;
+      flex-shrink: 0;
+    }
+
+    .item-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-price {
+      font-size: 12px;
+      color: #c0c0c8;
+      font-weight: 500;
+    }
+
+    .buy-btn {
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 11px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+      color: white;
+      box-shadow: 0 2px 5px rgba(139,92,246,0.3);
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .buy-btn:hover {
+      filter: brightness(1.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 20px;
+      color: #6b6b75;
+      font-size: 13px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #4c4c55;
+    }
+
+    .page-btn {
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      background: #2a2a30;
+      color: #ffffff;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      font-size: 12px;
+      color: #ffffff;
+    }
+
+    .store-page {
+      display: none;
+    }
+
+    .store-page.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="store-cot-wrapper">
+    <div class="store-container">
+      <div class="store-header">
+        <div class="store-title">🌙 黑市</div>
+      </div>
+
+      <div class="store-content">
+        <script class="store-raw-data" type="text/plain" style="display:none;">
+           $1
+        </script>
+
+        <div class="boss-info">
+          <img class="boss-avatar" src="https://i.postimg.cc/2yTG3QjS/shalen-1.jpg" alt="老板娘立绘">
+          <div class="boss-details">
+            <div class="boss-name">鲨冷</div>
+            <div class="boss-status">正常接待中</div>
+          </div>
+        </div>
+
+        <div class="items-section">
+          <div class="items-title">售卖道具</div>
+          <div class="items-container">
+            <!-- 商品将通过JavaScript动态生成 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var currentScript = document.currentScript;
+        if (!currentScript) {
+          var scripts = document.getElementsByTagName('script');
+          currentScript = scripts[scripts.length - 1];
+        }
+
+        var wrapper = currentScript.closest('.store-cot-wrapper');
+        var rawDataEl = wrapper.querySelector('.store-raw-data');
+        var bossAvatar = wrapper.querySelector('.boss-avatar');
+        var bossName = wrapper.querySelector('.boss-name');
+        var bossStatus = wrapper.querySelector('.boss-status');
+        var itemsContainer = wrapper.querySelector('.items-container');
+
+        console.log('[黑市] 开始解析数据...');
+
+        if (rawDataEl) {
+          var rawText = rawDataEl.textContent;
+          console.log('[黑市] 原始数据:', JSON.stringify(rawText));
+
+          // 解析老板娘信息（黑市使用"老板娘"而不是"服务员"）
+          var nameMatch = rawText.match(/姓名:\s*([^\n]+)/);
+          var statusMatch = rawText.match(/状态:\s*([^\n]+)/);
+          var avatarMatch = rawText.match(/立绘:\s*([^\n]+)/);
+
+          console.log('[黑市] 姓名匹配:', nameMatch);
+          console.log('[黑市] 状态匹配:', statusMatch);
+          console.log('[黑市] 立绘匹配:', avatarMatch);
+
+          if (nameMatch) {
+            bossName.textContent = nameMatch[1].trim();
+          }
+          if (statusMatch) {
+            bossStatus.textContent = statusMatch[1].trim();
+          }
+          if (avatarMatch) {
+            bossAvatar.src = 'https://i.postimg.cc/' + avatarMatch[1].trim() + '.jpg';
+          }
+
+          // 解析售卖道具
+          var items = [];
+          var itemsSection = rawText.split('售卖道具:')[1];
+
+          console.log('[黑市] 售卖道具区域:', itemsSection ? '找到' : '未找到');
+
+          if (itemsSection) {
+            var lines = itemsSection.split('\n');
+            var itemNames = [];
+
+            lines.forEach(function(line) {
+              var match = line.match(/^ {2}([^\s:]+):/);
+              if (match && !line.includes('配图') && !line.includes('价格')) {
+                itemNames.push(match[1].trim());
+              }
+            });
+
+            console.log('[黑市] 找到的商品名:', itemNames);
+
+            itemNames.forEach(function(itemName) {
+              var itemPattern = new RegExp('  ' + itemName + ':[\\s\\S]*?(?=\\n  [^\\s:]|\\n$|$)', 'i');
+              var itemMatch = itemsSection.match(itemPattern);
+
+              if (itemMatch) {
+                var itemBlock = itemMatch[0];
+                var imgPathMatch = itemBlock.match(/配图:\s*([^\n]+)/);
+                var priceMatch = itemBlock.match(/价格:\s*([^\n]+)/);
+
+                if (imgPathMatch && priceMatch) {
+                  items.push({
+                    name: itemName,
+                    img: 'https://i.postimg.cc/' + imgPathMatch[1].trim() + '.jpg',
+                    price: priceMatch[1].trim()
+                  });
+                }
+              }
+            });
+          }
+
+          console.log('[黑市] 解析到的商品:', items);
+
+          // 使用默认数据如果没有解析到
+          if (items.length === 0) {
+            items = [
+              { name: '隐藏式监控', img: 'https://i.postimg.cc/zGXKKXM3/baipianpian-1.jpg', price: '500元' },
+              { name: '玩具', img: 'https://i.postimg.cc/zGXKKXM3/baipianpian-1.jpg', price: '500元' },
+              { name: '药水', img: 'https://i.postimg.cc/zGXKKXM3/baipianpian-1.jpg', price: '500元' }
+            ];
+            console.log('[黑市] 使用默认商品列表');
+          }
+
+          // 渲染商品
+          var itemsPerPage = 3;
+          var totalPages = Math.ceil(items.length / itemsPerPage);
+
+          itemsContainer.innerHTML = '';
+
+          if (items.length === 0) {
+            itemsContainer.innerHTML = '<div class="empty-state">暂无商品</div>';
+          } else if (items.length <= itemsPerPage) {
+            // 3个及以下直接显示
+            items.forEach(function(item) {
+              var itemDiv = document.createElement('div');
+              itemDiv.className = 'store-item';
+              itemDiv.innerHTML = `
+                <img class="item-image" src="${item.img}" alt="${item.name}">
+                <div class="item-details">
+                  <div class="item-name">${item.name}</div>
+                  <div class="item-price">${item.price}</div>
+                </div>
+                <button class="buy-btn">购买</button>
+              `;
+
+              itemDiv.querySelector('.buy-btn').onclick = function() {
+                if (typeof triggerSlash === 'function') {
+                  triggerSlash('/setinput 购买' + item.name);
+                } else {
+                  console.log('购买:', item.name);
+                }
+              };
+
+              itemsContainer.appendChild(itemDiv);
+            });
+          } else {
+            // 超过3个，使用翻页
+            for (var page = 0; page < totalPages; page++) {
+              var pageDiv = document.createElement('div');
+              pageDiv.className = 'store-page' + (page === 0 ? ' active' : '');
+              pageDiv.dataset.page = page;
+
+              var pageItems = items.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
+
+              pageItems.forEach(function(item) {
+                var itemDiv = document.createElement('div');
+                itemDiv.className = 'store-item';
+                itemDiv.innerHTML = `
+                  <img class="item-image" src="${item.img}" alt="${item.name}">
+                  <div class="item-details">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price">${item.price}</div>
+                  </div>
+                  <button class="buy-btn">购买</button>
+                `;
+
+                itemDiv.querySelector('.buy-btn').onclick = function() {
+                  if (typeof triggerSlash === 'function') {
+                    triggerSlash('/setinput 购买' + item.name);
+                  } else {
+                    console.log('购买:', item.name);
+                  }
+                };
+
+                pageDiv.appendChild(itemDiv);
+              });
+
+              itemsContainer.appendChild(pageDiv);
+            }
+
+            // 添加翻页控制
+            var paginationDiv = document.createElement('div');
+            paginationDiv.className = 'pagination';
+            paginationDiv.innerHTML = `
+              <button class="page-btn prev-btn" disabled>上一页</button>
+              <span class="page-info">1 / ${totalPages}</span>
+              <button class="page-btn next-btn" ${totalPages <= 1 ? 'disabled' : ''}>下一页</button>
+            `;
+            itemsContainer.appendChild(paginationDiv);
+
+            // 翻页逻辑
+            var currentPage = 0;
+            var prevBtn = paginationDiv.querySelector('.prev-btn');
+            var nextBtn = paginationDiv.querySelector('.next-btn');
+            var pageInfo = paginationDiv.querySelector('.page-info');
+
+            prevBtn.onclick = function() {
+              if (currentPage > 0) {
+                wrapper.querySelector('.store-page.active').classList.remove('active');
+                currentPage--;
+                wrapper.querySelector('.store-page[data-page="' + currentPage + '"]').classList.add('active');
+                pageInfo.textContent = (currentPage + 1) + ' / ' + totalPages;
+                prevBtn.disabled = currentPage === 0;
+                nextBtn.disabled = currentPage === totalPages - 1;
+              }
+            };
+
+            nextBtn.onclick = function() {
+              if (currentPage < totalPages - 1) {
+                wrapper.querySelector('.store-page.active').classList.remove('active');
+                currentPage++;
+                wrapper.querySelector('.store-page[data-page="' + currentPage + '"]').classList.add('active');
+                pageInfo.textContent = (currentPage + 1) + ' / ' + totalPages;
+                prevBtn.disabled = currentPage === 0;
+                nextBtn.disabled = currentPage === totalPages - 1;
+              }
+            };
+          }
+
+          console.log('[黑市] 渲染完成，共', items.length, '个商品');
+        } else {
+          console.log('[黑市] 未找到原始数据元素');
+        }
+      })();
+    </script>
+  </div>
+
+</body>
+</html>

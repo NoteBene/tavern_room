@@ -1,664 +1,638 @@
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>房东 - 仪表面板</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-    <style>
-      :root {
-        --primary-yellow: #ffd700; /* 主黄色，用于房客标签 */
-        --primary-brown: #8b4513; /* 主棕色，用于道具等标签 */
-        --light-yellow: #fff8dc; /* 浅黄色，用于房间按钮 */
-        --cream-bg: #faf3e0; /* 米黄色背景 */
-        --cream-dark: #f5e6ca; /* 稍深的米黄 */
-        --cream-darker: #e8d9b5; /* 更深的米黄 */
-        --text-dark: #5d4037; /* 深色文字 */
-        --accent-gold: #d4af37; /* 金色强调色 */
-        --border-light: #d7ccc8; /* 浅色边框 */
-      }
+```
+<head>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    :root {
+      --primary-yellow: #ffd700; /* 主黄色，用于房客标签 */
+      --primary-brown: #8b4513; /* 主棕色，用于道具等标签 */
+      --light-yellow: #fff8dc; /* 浅黄色，用于房间按钮 */
+      --cream-bg: #faf3e0; /* 米黄色背景 */
+      --cream-dark: #f5e6ca; /* 稍深的米黄 */
+      --cream-darker: #e8d9b5; /* 更深的米黄 */
+      --text-dark: #5d4037; /* 深色文字 */
+      --accent-gold: #d4af37; /* 金色强调色 */
+      --border-light: #d7ccc8; /* 浅色边框 */
+    }
 
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        background: var(--cream-bg);
-        color: var(--text-dark);
-        margin: 0;
-        padding: 6px;
-        min-height: 100vh;
-      }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      background: var(--cream-bg);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 6px;
+      min-height: 50vh;
+    }
 
+    .card {
+      max-width: 980px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 12px 8px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border-light);
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 8px;
+    }
+
+    .time {
+      color: #795548;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .top-stats {
+      display: flex;
+      gap: 6px;
+    }
+
+    .stat {
+      background: var(--cream-dark);
+      border: 1px solid var(--border-light);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      color: var(--text-dark);
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .stat strong {
+      color: var(--primary-brown);
+      font-size: 11px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin: 8px 0;
+      padding-bottom: 2px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .tabs button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      background: var(--cream-dark);
+      color: var(--text-dark);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .tabs button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .tabs button.active {
+      color: white;
+      border-color: var(--accent-gold);
+      box-shadow: 0 2px 4px rgba(212, 175, 55, 0.2);
+    }
+
+    .tabs button:nth-child(1).active {
+      /* 房客 */
+      background: var(--primary-yellow);
+      color: #5d4037;
+    }
+
+    .tabs button:nth-child(2).active {
+      /* 道具 */
+      background: #8b4513;
+    }
+
+    .tabs button:nth-child(3).active {
+      /* 监控 */
+      background: #2e7d32;
+    }
+
+    .tabs button:nth-child(4).active {
+      /* 事务 */
+      background: #1565c0;
+    }
+
+    .room-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .room-tabs button {
+      padding: 4px 4px;
+      border-radius: 4px;
+      border: 1px solid var(--border-light);
+      background: var(--light-yellow);
+      color: var(--text-dark);
+      cursor: pointer;
+      font-size: 10px;
+      transition: all 0.2s;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .room-tabs button:hover {
+      background: #ffecb3;
+    }
+
+    .room-tabs button.active {
+      background: var(--primary-yellow);
+      border-color: var(--accent-gold);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(255, 215, 0, 0.3);
+    }
+
+    .guest-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .guest-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .char-portrait {
+      width: 90px; /* 放大至9:16比例 */
+      height: 128px; /* 9:16比例 */
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+      background: white;
+    }
+
+    .char-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .guest-info-vertical {
+      gap: 10px; /* 增大上下间距 */
+    }
+
+    .guest-meta {
+      font-size: 10px;
+      color: #795548;
+      display: flex;
+      gap: 8px;
+    }
+
+    .progress-item {
+      font-size: 14px; /* 减小整体字号 */
+      line-height: 1.2;
+    }
+
+    .progress-item strong {
+      font-size: 14px; /* 数值略大保持可读性 */
+      font-weight: 600;
+    }
+
+    .bar-container {
+      height: 8px; /* 适当缩小进度条高度 */
+    }
+
+    .bar {
+      height: 100%;
+      background: linear-gradient(to right, #4caf50, #8bc34a);
+      transition: width 0.5s ease;
+    }
+
+    .bar.warn {
+      background: linear-gradient(to right, #f44336, #ff9800);
+    }
+
+    .cards {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .card-block {
+      flex: 1;
+      min-width: 180px;
+      background: var(--cream-dark);
+      padding: 0 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+    }
+
+    .card-block h4 {
+      margin: 2px 0 6px 0;
+      padding: 0;
+      color: var(--text-dark);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .collapsible-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .collapse-icon {
+      transition: transform 0.3s;
+      font-size: 6px;
+      color: #795548;
+      margin-right: 2px;
+    }
+
+    .collapsed .collapse-icon {
+      transform: rotate(-90deg);
+    }
+
+    .card-content {
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .collapsed + .card-content {
+      max-height: 0;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .card-item {
+      background: white;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-light);
+      font-size: 10px;
+    }
+
+    .card-item strong {
+      color: var(--primary-brown);
+      display: block;
+      font-size: 9px;
+      margin-bottom: 2px;
+    }
+
+    .list-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .list-cards .card-block {
+      width: 180px;
+    }
+
+    .empty-room,
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #795548;
+      font-size: 12px;
+      background: var(--cream-dark);
+      border-radius: 8px;
+      border: 1px dashed var(--border-light);
+      margin: 10px 0;
+    }
+
+    .empty-room::before,
+    .empty-state::before {
+      display: block;
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+
+    .empty-room::before {
+      content: '🏠'; /* 房间图标 */
+    }
+
+    .tab-icon {
+      font-size: 12px;
+    }
+
+    .empty-state[data-type='props']::before {
+      content: '🎒'; /* 背包图标 */
+    }
+
+    .empty-state[data-type='monitor']::before {
+      content: '📹'; /* 摄像机图标 */
+    }
+
+    .empty-state[data-type='tasks']::before {
+      content: '📋'; /* 记事本图标 */
+    }
+
+    .guest-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+
+    .guest-info > div {
+      background: var(--cream-dark);
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border-light);
+    }
+
+    .guest-info strong {
+      color: var(--primary-brown);
+    }
+
+    @media (max-width: 640px) {
       .card {
-        max-width: 980px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 12px;
-        padding: 12px 8px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid var(--border-light);
+        padding: 8px 6px;
       }
-
-      .top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 0;
-        border-bottom: 1px solid var(--border-light);
-        margin-bottom: 8px;
-      }
-
-      .time {
-        color: #795548;
-        font-size: 12px;
-        font-weight: 500;
-      }
-
-      .top-stats {
-        display: flex;
-        gap: 6px;
-      }
-
-      .stat {
-        background: var(--cream-dark);
-        border: 1px solid var(--border-light);
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 10px;
-        color: var(--text-dark);
-        min-width: 80px;
-        text-align: center;
-      }
-
-      .stat strong {
-        color: var(--primary-brown);
-        font-size: 11px;
-      }
-
-      .tabs {
-        display: flex;
-        gap: 8px;
-        margin: 8px 0;
-        padding-bottom: 2px;
-        border-bottom: 1px solid var(--border-light);
-      }
-
-      .tabs button {
-        padding: 6px 12px;
-        border-radius: 6px;
-        border: 2px solid transparent;
-        background: var(--cream-dark);
-        color: var(--text-dark);
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        transition: all 0.2s;
-      }
-
-      .tabs button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .tabs button.active {
-        color: white;
-        border-color: var(--accent-gold);
-        box-shadow: 0 2px 4px rgba(212, 175, 55, 0.2);
-      }
-
-      .tabs button:nth-child(1).active {
-        /* 房客 */
-        background: var(--primary-yellow);
-        color: #5d4037;
-      }
-
-      .tabs button:nth-child(2).active {
-        /* 道具 */
-        background: #8b4513;
-      }
-
-      .tabs button:nth-child(3).active {
-        /* 监控 */
-        background: #2e7d32;
-      }
-
-      .tabs button:nth-child(4).active {
-        /* 事务 */
-        background: #1565c0;
-      }
-
-      .room-tabs {
-        display: flex;
-        gap: 4px;
-        margin-bottom: 4px;
-        flex-wrap: wrap;
-      }
-
-      .room-tabs button {
-        padding: 4px 4px;
-        border-radius: 4px;
-        border: 1px solid var(--border-light);
-        background: var(--light-yellow);
-        color: var(--text-dark);
-        cursor: pointer;
-        font-size: 10px;
-        transition: all 0.2s;
-        min-width: 30px;
-        text-align: center;
-      }
-
-      .room-tabs button:hover {
-        background: #ffecb3;
-      }
-
-      .room-tabs button.active {
-        background: var(--primary-yellow);
-        border-color: var(--accent-gold);
-        font-weight: 600;
-        box-shadow: 0 1px 3px rgba(255, 215, 0, 0.3);
-      }
-
-      .guest-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .guest-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 8px;
-      }
-
-      .char-portrait {
-        width: 90px; /* 放大至9:16比例 */
-        height: 128px; /* 9:16比例 */
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        border-radius: 6px;
-        border: 1px solid var(--border-light);
-        background: white;
-      }
-
-      .char-portrait img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-
-      .guest-info-vertical {
-        gap: 10px; /* 增大上下间距 */
-      }
-
-      .guest-meta {
-        font-size: 10px;
-        color: #795548;
-        display: flex;
-        gap: 8px;
-      }
-
-      .progress-item {
-        font-size: 14px; /* 减小整体字号 */
-        line-height: 1.2;
-      }
-
-      .progress-item strong {
-        font-size: 14px; /* 数值略大保持可读性 */
-        font-weight: 600;
-      }
-
-      .bar-container {
-        height: 8px; /* 适当缩小进度条高度 */
-      }
-
-      .bar {
-        height: 100%;
-        background: linear-gradient(to right, #4caf50, #8bc34a);
-        transition: width 0.5s ease;
-      }
-
-      .bar.warn {
-        background: linear-gradient(to right, #f44336, #ff9800);
-      }
-
-      .cards {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .card-block {
-        flex: 1;
-        min-width: 180px;
-        background: var(--cream-dark);
-        padding: 0 4px;
-        border-radius: 8px;
-        border: 1px solid var(--border-light);
-      }
-
-      .card-block h4 {
-        margin: 2px 0 6px 0;
-        padding: 0;
-        color: var(--text-dark);
-        font-size: 13px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-      }
-
-      .collapsible-header {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .collapse-icon {
-        transition: transform 0.3s;
-        font-size: 6px;
-        color: #795548;
-        margin-right: 2px;
-      }
-
-      .collapsed .collapse-icon {
-        transform: rotate(-90deg);
-      }
-
-      .card-content {
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-      }
-
-      .collapsed + .card-content {
-        max-height: 0;
-      }
-
       .card-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-        margin-top: 6px;
+        grid-template-columns: repeat(2, 1fr);
       }
-
-      .card-item {
-        background: white;
-        padding: 6px;
-        border-radius: 4px;
-        border: 1px solid var(--border-light);
-        font-size: 10px;
+      .cards {
+        flex-direction: column;
       }
-
-      .card-item strong {
-        color: var(--primary-brown);
-        display: block;
-        font-size: 9px;
-        margin-bottom: 2px;
+      .card-block {
+        min-width: 100%;
       }
-
-      .list-cards {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
       .list-cards .card-block {
-        width: 180px;
+        width: 100%;
       }
-
-      .empty-room,
-      .empty-state {
-        text-align: center;
-        padding: 40px 20px;
-        color: #795548;
-        font-size: 12px;
-        background: var(--cream-dark);
-        border-radius: 8px;
-        border: 1px dashed var(--border-light);
-        margin: 10px 0;
+      .top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
       }
-
-      .empty-room::before,
-      .empty-state::before {
-        display: block;
-        font-size: 32px;
-        margin-bottom: 12px;
-        opacity: 0.6;
+      .top-stats {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
       }
-
-      .empty-room::before {
-        content: '🏠'; /* 房间图标 */
+      .stat {
+        flex: 1;
+        min-width: 40px;
       }
-
-      .tab-icon {
-        font-size: 12px;
+      .tabs {
+        flex-wrap: wrap;
       }
-
-      .empty-state[data-type='props']::before {
-        content: '🎒'; /* 背包图标 */
+      .tabs button {
+        flex: 1;
+        justify-content: center;
       }
-
-      .empty-state[data-type='monitor']::before {
-        content: '📹'; /* 摄像机图标 */
+      .progress-row {
+        flex-direction: column;
       }
-
-      .empty-state[data-type='tasks']::before {
-        content: '📋'; /* 记事本图标 */
-      }
-
-      .guest-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 8px;
-        margin-top: 8px;
-        font-size: 11px;
-      }
-
-      .guest-info > div {
-        background: var(--cream-dark);
-        padding: 6px 10px;
-        border-radius: 4px;
-        border: 1px solid var(--border-light);
-      }
-
-      .guest-info strong {
-        color: var(--primary-brown);
-      }
-
-      @media (max-width: 640px) {
-        .card {
-          padding: 8px 6px;
-        }
-        .card-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .cards {
-          flex-direction: column;
-        }
-        .card-block {
-          min-width: 100%;
-        }
-        .list-cards .card-block {
-          width: 100%;
-        }
-        .top {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 6px;
-        }
-        .top-stats {
-          width: 100%;
-          justify-content: space-between;
-          flex-wrap: wrap;
-        }
-        .stat {
-          flex: 1;
-          min-width: 40px;
-        }
-        .tabs {
-          flex-wrap: wrap;
-        }
-        .tabs button {
-          flex: 1;
-          justify-content: center;
-        }
-        .progress-row {
-          flex-direction: column;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app" class="card">
-      <div class="top">
-        <div>
-          <div class="time">{{ stat['当前时间'] || '—' }}</div>
-        </div>
-        <div class="top-stats">
-          <div class="stat">
-            <span>资金: <strong>{{ stat['主角资金'] ?? '—' }}</strong>--</span>
-            <span>公寓知名度: <strong>{{ stat['公寓知名度'] ?? '—' }}</strong>--</span>
-            <span>酒吧知名度: <strong>{{ stat['酒吧知名度'] ?? '—' }}</strong></span>
-          </div>
-        </div>
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="card">
+    <div class="top">
+      <div>
+        <div class="time">{{ stat['当前时间'] || '—' }}</div>
       </div>
-
-      <div class="tabs" role="tablist">
-        <button :class="{active:tab==='房客'}" @click="tab='房客'">
-          <span class="tab-icon">👥</span>
-        </button>
-        <button :class="{active:tab==='道具'}" @click="tab='道具'">
-          <span class="tab-icon">🎮</span>
-        </button>
-        <button :class="{active:tab==='监控'}" @click="tab='监控'">
-          <span class="tab-icon">📱</span>
-        </button>
-        <button :class="{active:tab==='事务'}" @click="tab='事务'">
-          <span class="tab-icon">📅</span>
-        </button>
-      </div>
-
-      <div v-if="tab==='房客'">
-        <div class="room-tabs">
-          <button v-for="r in rooms" :key="r" :class="{active:activeRoom===r}" @click="setRoom(r)">{{ r }}</button>
-        </div>
-
-        <div id="room-content">
-          <div v-if="guest" class="guest-panel">
-            <div class="guest-header">
-              <div class="char-portrait">
-                <img v-if="portraitSrc" :src="portraitSrc" :alt="guestName" />
-              </div>
-              <div class="guest-info-vertical">
-                <div class="guest-name">{{ guestName }}</div>
-                <div class="guest-meta">
-                  <span>{{ (guest['基本信息'] && guest['基本信息']['种族']) ?? '—' }}</span>
-                  <span>{{ (guest['基本信息'] && guest['基本信息']['等级']) ?? '—' }}</span>
-                </div>
-                <div class="progress-item">
-                  <div>好感度: <strong>{{ guest.好感度 ?? 0 }}</strong></div>
-                  <div class="bar-container"><div class="bar" :style="{width: (guest.好感度||0) + '%'}"></div></div>
-                </div>
-                <div class="progress-item">
-                  <div>堕落度: <strong>{{ guest.堕落度 ?? 0 }}</strong></div>
-                  <div class="bar-container">
-                    <div class="bar warn" :style="{width: (guest.堕落度||0) + '%'}"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="cards">
-              <div class="card-block">
-                <h4 :class="{collapsed: isOutfitCollapsed}" @click="toggleCollapse('outfit')">
-                  <span class="collapsible-header">
-                    <span class="collapse-icon">▼</span>
-                    着装
-                  </span>
-                </h4>
-                <div class="card-content" :style="{maxHeight: isOutfitCollapsed ? '0px' : '500px'}">
-                  <div class="card-grid">
-                    <div class="card-item" v-for="k in outfitKeys" :key="k">
-                      <strong>{{ k }}</strong>
-                      <div>{{ (guest['着装'] && guest['着装'][k]) ?? '—' }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="guest-info">
-              <div>当前心情: <strong>{{ guest['当前心情'] ?? '—' }}</strong></div>
-              <div>正在干嘛: <strong>{{ guest['正在干嘛'] ?? '—' }}</strong></div>
-              <div>当前计划: <strong>{{ guest['当前计划'] ?? '—' }}</strong></div>
-            </div>
-          </div>
-          <div v-else class="empty-room">房间暂无房客</div>
-        </div>
-      </div>
-
-      <div v-if="tab==='道具'">
-        <div v-if="Object.keys(items).length === 0" class="empty-state" data-type="props">背包空空如也</div>
-        <div v-else class="list-cards">
-          <div class="card-block" v-for="(it,k) in items" :key="k">
-            <h4>{{ k }}</h4>
-            <div>{{ it['描述'] ?? it['description'] ?? '—' }}</div>
-            <div>数量: {{ it['数量'] ?? it['count'] ?? '—' }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="tab==='监控'">
-        <div v-if="Object.keys(monitors).length === 0" class="empty-state" data-type="monitor">暂无监控设备</div>
-        <div v-else class="list-cards">
-          <div class="card-block" v-for="(v,k) in monitors" :key="k">
-            <h4>{{ k }}</h4>
-            <div>{{ v }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="tab==='事务'">
-        <div v-if="tasks.length === 0" class="empty-state" data-type="tasks">暂无待处理事务</div>
-        <div v-else class="list-cards">
-          <div class="card-block" v-for="(t,idx) in tasks" :key="idx">
-            <div>{{ t }}</div>
-          </div>
+      <div class="top-stats">
+        <div class="stat">
+          <span>资金: <strong>{{ stat['主角资金'] ?? '—' }}</strong>&nbsp;&nbsp;</span>
+          <span>公寓知名度: <strong>{{ stat['公寓知名度'] ?? '—' }}</strong>&nbsp;&nbsp;</span>
+          <span>酒吧知名度: <strong>{{ stat['酒吧知名度'] ?? '—' }}</strong></span>
         </div>
       </div>
     </div>
 
-    <script type="module">
-      const { createApp, ref, computed, onMounted } = Vue;
+    <div class="tabs" role="tablist">
+      <button :class="{active:tab==='房客'}" @click="tab='房客'">
+        <span class="tab-icon">👥</span>
+      </button>
+      <button :class="{active:tab==='道具'}" @click="tab='道具'">
+        <span class="tab-icon">🎮</span>
+      </button>
+      <button :class="{active:tab==='监控'}" @click="tab='监控'">
+        <span class="tab-icon">📱</span>
+      </button>
+      <button :class="{active:tab==='事务'}" @click="tab='事务'">
+        <span class="tab-icon">📅</span>
+      </button>
+    </div>
 
-      function _getGlobal(name) {
-        return window[name];
-      }
-      function getAllVariables() {
-        return typeof _getGlobal('getAllVariables') === 'function'
-          ? _getGlobal('getAllVariables')()
-          : window.__mock_variables || {};
-      }
-      async function waitInit() {
-        const f = _getGlobal('waitGlobalInitialized');
-        if (typeof f === 'function') await f('Mvu');
-      }
+    <div v-if="tab==='房客'">
+      <div class="room-tabs">
+        <button v-for="r in rooms" :key="r" :class="{active:activeRoom===r}" @click="setRoom(r)">{{ r }}</button>
+      </div>
 
-      createApp({
-        setup() {
-          const tab = ref('房客');
-          const rooms = ['201', '202', '203', '204', '205'];
-          const activeRoom = ref(rooms[0]);
-          const vars = ref(getAllVariables());
-          const stat = computed(() => vars.value.stat_data || {});
+      <div id="room-content">
+        <div v-if="guest" class="guest-panel">
+          <div class="guest-header">
+            <div class="char-portrait">
+              <img v-if="portraitSrc" :src="portraitSrc" :alt="guestName" />
+            </div>
+            <div class="guest-info-vertical">
+              <div class="guest-name">{{ guestName }}</div>
+              <div class="progress-item">
+                <div>好感度: <strong>{{ guest.好感度 ?? 0 }}</strong></div>
+                <div class="bar-container"><div class="bar" :style="{width: (guest.好感度||0) + '%'}"></div></div>
+              </div>
+              <div class="progress-item">
+                <div>堕落度: <strong>{{ guest.堕落度 ?? 0 }}</strong></div>
+                <div class="bar-container">
+                  <div class="bar warn" :style="{width: (guest.堕落度||0) + '%'}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          // 折叠状态
-          const isBasicCollapsed = ref(true);
-          const isOutfitCollapsed = ref(true);
+          <div class="cards">
+            <div class="card-block">
+              <h4 :class="{collapsed: isOutfitCollapsed}" @click="toggleCollapse('outfit')">
+                <span class="collapsible-header">
+                  <span class="collapse-icon">▼</span>
+                  着装
+                </span>
+              </h4>
+              <div class="card-content" :style="{maxHeight: isOutfitCollapsed ? '0px' : '500px'}">
+                <div class="card-grid">
+                  <div class="card-item" v-for="k in outfitKeys" :key="k">
+                    <strong>{{ k }}</strong>
+                    <div>{{ (guest['着装'] && guest['着装'][k]) ?? '—' }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          function setRoom(r) {
-            activeRoom.value = r;
+          <div class="guest-info">
+            <div>正在干嘛: <strong>{{ guest['正在干嘛'] ?? '—' }}</strong></div>
+            <div>当前计划: <strong>{{ guest['当前计划'] ?? '—' }}</strong></div>
+          </div>
+        </div>
+        <div v-else class="empty-room">房间暂无房客</div>
+      </div>
+    </div>
+
+    <div v-if="tab==='道具'">
+      <div v-if="Object.keys(items).length === 0" class="empty-state" data-type="props">背包空空如也</div>
+      <div v-else class="list-cards">
+        <div class="card-block" v-for="(it,k) in items" :key="k">
+          <h4>{{ k }}</h4>
+          <div>{{ it['描述'] ?? it['description'] ?? '—' }}</div>
+          <div>数量: {{ it['数量'] ?? it['count'] ?? '—' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="tab==='监控'">
+      <div v-if="Object.keys(monitors).length === 0" class="empty-state" data-type="monitor">暂无监控设备</div>
+      <div v-else class="list-cards">
+        <div class="card-block" v-for="(v,k) in monitors" :key="k">
+          <h4>{{ k }}</h4>
+          <div>{{ v }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="tab==='事务'">
+      <div v-if="tasks.length === 0" class="empty-state" data-type="tasks">暂无待处理事务</div>
+      <div v-else class="list-cards">
+        <div class="guest-info" v-for="(t,idx) in tasks" :key="idx">
+          <div>{{ t }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    function _getGlobal(name) {
+      return window[name];
+    }
+    function getAllVariables() {
+      return typeof _getGlobal('getAllVariables') === 'function'
+        ? _getGlobal('getAllVariables')()
+        : window.__mock_variables || {};
+    }
+    async function waitInit() {
+      const f = _getGlobal('waitGlobalInitialized');
+      if (typeof f === 'function') await f('Mvu');
+    }
+
+    createApp({
+      setup() {
+        const tab = ref('房客');
+        const rooms = ['201', '202', '203', '204', '205'];
+        const activeRoom = ref(rooms[0]);
+        const vars = ref(getAllVariables());
+        const stat = computed(() => vars.value.stat_data || {});
+
+        // 折叠状态
+        const isBasicCollapsed = ref(true);
+        const isOutfitCollapsed = ref(true);
+
+        function setRoom(r) {
+          activeRoom.value = r;
+        }
+
+        function toggleCollapse(type) {
+          if (type === 'basic') {
+            isBasicCollapsed.value = !isBasicCollapsed.value;
+          } else if (type === 'outfit') {
+            isOutfitCollapsed.value = !isOutfitCollapsed.value;
+          }
+        }
+
+        const guestNames = computed(() => Object.keys(stat.value['房客'] || {}));
+        const guestIndex = computed(() => rooms.indexOf(activeRoom.value));
+        const guestName = computed(() => guestNames.value[guestIndex.value] || null);
+        const guest = computed(() => (guestName.value ? stat.value['房客'][guestName.value] : null));
+
+        const portraitSrc = computed(() => {
+          if (!guest.value) return null;
+          const g = guest.value;
+          let cand = g['立绘'] || g['portrait'] || g['头像'] || g['avatar'] || g['avatarUrl'] || g['image'];
+          const name = guestName.value || '';
+          const repoRawBase = 'https://i.postimg.cc';
+
+          // 若为数组，则取第一项；确保为字符串
+          if (Array.isArray(cand)) cand = cand[0];
+          if (!cand) {
+            return `https://cdn.jsdelivr.net/gh/NoteBene/tavern_room@main/img/默认角色1.jpg`;
+          }
+          cand = String(cand).trim();
+
+          // 已经是绝对 URL，直接返回
+          if (/^https?:\/\//.test(cand)) return cand;
+          // 新增角色名称检查逻辑
+          if (name !== '虞汐' && name !== '玥玥' && name !== '伊莉雅') {
+            return `https://cdn.jsdelivr.net/gh/NoteBene/tavern_room@main/img/默认角色1.jpg`;
           }
 
-          function toggleCollapse(type) {
-            if (type === 'basic') {
-              isBasicCollapsed.value = !isBasicCollapsed.value;
-            } else if (type === 'outfit') {
-              isOutfitCollapsed.value = !isOutfitCollapsed.value;
-            }
+          // 若 cand 是单个文件名或不含扩展名，则视作文件名放在角色文件夹下
+          let filename = cand;
+          if (!/\.[a-zA-Z0-9]+$/.test(filename)) filename += '.jpg';
+          return `${repoRawBase}/${encodeURIComponent(filename)}`;
+        });
+
+        const basicKeys = ['种族', '等级', '身高', '三围', '罩杯', '年龄'];
+        const outfitKeys = ['上装', '下装', '内衣', '袜子', '鞋子', '饰品'];
+
+        const items = computed(() => stat.value['物品栏'] || {});
+        const monitors = computed(() => stat.value['可监控区域'] || {});
+        const tasks = computed(() => stat.value['近期事务'] || []);
+
+        onMounted(async () => {
+          await waitInit();
+          function tick() {
+            vars.value = getAllVariables();
           }
+          tick();
+          setInterval(tick, 2000);
+        });
 
-          const guestNames = computed(() => Object.keys(stat.value['房客'] || {}));
-          const guestIndex = computed(() => rooms.indexOf(activeRoom.value));
-          const guestName = computed(() => guestNames.value[guestIndex.value] || null);
-          const guest = computed(() => (guestName.value ? stat.value['房客'][guestName.value] : null));
-
-          const portraitSrc = computed(() => {
-            if (!guest.value) return null;
-            const g = guest.value;
-            let cand = g['立绘'] || g['portrait'] || g['头像'] || g['avatar'] || g['avatarUrl'] || g['image'];
-            const name = guestName.value || '';
-            // 使用 jsDelivr CDN 以提高中国大陆可访问性（指向仓库的 img 目录）
-            const repoRawBase = 'https://cdn.jsdelivr.net/gh/NoteBene/tavern_room@main/img';
-
-            // 若为数组，则取第一项；确保为字符串
-            if (Array.isArray(cand)) cand = cand[0];
-            if (!cand) {
-              return `${repoRawBase}/默认角色1.jpg`;
-            }
-            cand = String(cand).trim();
-
-            // 已经是绝对 URL，直接返回
-            if (/^https?:\/\//.test(cand)) return cand;
-            // 新增角色名称检查逻辑
-            if (name !== '虞汐' && name !== '小萌') {
-              return `${repoRawBase}/默认角色1.jpg`;
-            }
-
-            // 如果包含路径分隔符，尝试按仓库 img 路径构造（允许传入 img/角色/文件.jpg 或 角色/文件.jpg）
-            if (cand.includes('/')) {
-              const parts = cand.split('/').filter(Boolean);
-              // 如果以 img 开头，去掉该部分
-              if (parts[0] === 'img') parts.shift();
-              const folder = parts.shift() || name;
-              let file = parts.join('/');
-              if (!file) {
-                // 优先使用房客变量中的 `立绘` 字段（允许：常服、内衣、情趣内衣、裸体、精液）
-                const lp = (g && g['立绘']) || '内衣';
-                file = String(lp || '内衣');
-                if (!/\.[a-zA-Z0-9]+$/.test(file)) file += '.jpg';
-              }
-              return `${repoRawBase}/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
-            }
-
-            // 若 cand 是单个文件名或不含扩展名，则视作文件名放在角色文件夹下
-            let filename = cand;
-            if (!/\.[a-zA-Z0-9]+$/.test(filename)) filename += '.jpg';
-            return `${repoRawBase}/${encodeURIComponent(name)}/${encodeURIComponent(filename)}`;
-          });
-
-          const basicKeys = ['种族', '等级', '身高', '三围', '罩杯', '年龄'];
-          const outfitKeys = ['上装', '下装', '内衣', '袜子', '鞋子', '饰品'];
-
-          const items = computed(() => stat.value['物品栏'] || {});
-          const monitors = computed(() => stat.value['可监控区域'] || {});
-          const tasks = computed(() => stat.value['近期事务'] || []);
-
-          onMounted(async () => {
-            await waitInit();
-            function tick() {
-              vars.value = getAllVariables();
-            }
-            tick();
-            setInterval(tick, 2000);
-          });
-
-          return {
-            tab,
-            rooms,
-            activeRoom,
-            setRoom,
-            stat,
-            guest,
-            guestName,
-            portraitSrc,
-            basicKeys,
-            outfitKeys,
-            items,
-            monitors,
-            tasks,
-            isBasicCollapsed,
-            isOutfitCollapsed,
-            toggleCollapse,
-          };
-        },
-      }).mount('#app');
-    </script>
-  </body>
-</html>
+        return {
+          tab,
+          rooms,
+          activeRoom,
+          setRoom,
+          stat,
+          guest,
+          guestName,
+          portraitSrc,
+          basicKeys,
+          outfitKeys,
+          items,
+          monitors,
+          tasks,
+          isBasicCollapsed,
+          isOutfitCollapsed,
+          toggleCollapse,
+        };
+      },
+    }).mount('#app');
+  </script>
+</body>
+```
